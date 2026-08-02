@@ -356,6 +356,26 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555;}
 }
 </style>
+
+<!-- ===========================================================
+     PIXEL META. Remplace REMPLACER_PAR_TON_ID par ton numéro
+     à seize chiffres, trouvé dans le gestionnaire d'évènements.
+     Ne le remplace nulle part ailleurs dans ce fichier.
+     =========================================================== -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'REMPLACER_PAR_TON_ID');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=REMPLACER_PAR_TON_ID&ev=PageView&noscript=1"
+alt=""></noscript>
+<!-- Fin du pixel Meta. -->
+
 </head>
 <body>
 
@@ -732,7 +752,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
       </div>
       <div>
         <h3>Nous joindre.</h3>
-        <p><a href="https://wa.me/2250502629217">WhatsApp : 05 02 62 92 17.</a><br>Abidjan, Côte d'Ivoire.</p>
+        <p><a href="https://wa.me/2250502629217" onclick="if(typeof fbq==='function'){fbq('track','Contact');}">WhatsApp : 05 02 62 92 17.</a><br>Abidjan, Côte d'Ivoire.</p>
       </div>
       <div>
         <h3>Aller à.</h3>
@@ -808,6 +828,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
         bouton.disabled = false;
         bouton.textContent = 'Ouvrir WhatsApp.';
         form.setAttribute('data-pret','1');
+        /* Pixel Meta : le formulaire est rempli, c'est un lead qualifié. */
+        if(typeof fbq === 'function'){
+          fbq('track', 'Lead', {content_name:'formulaire-commande', zone:d.get('zone')||''});
+          fbq('track', 'Contact');
+        }
         window.location.href = lien;
       };
 
