@@ -22,6 +22,7 @@
   --vert-voile:#F5F9F4;
   --or:#C9A227;
   --or-pale:#F3E7BE;
+  --orange:#D2601A;
   --encre:#14261A;
   --encre-doux:#4A5A4E;
   --blanc:#FFFFFF;
@@ -273,6 +274,107 @@ body{padding-bottom:86px;}
 .carte p{margin:0;font-size:.95rem;color:var(--encre-doux);}
 .carte .zone{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--or);line-height:1;margin-bottom:12px;display:block;}
 
+.fort{color:var(--orange);font-weight:700;}
+
+/* ---- Bandeau des pays livrés ---- */
+.pays-bande{
+  background:var(--vert-fonce);color:#EAF3EA;padding:12px 0;overflow:hidden;
+  position:relative;
+}
+.pays-bande::before,.pays-bande::after{
+  content:"";position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+.pays-bande::before{left:0;background:linear-gradient(90deg,var(--vert-fonce),transparent);}
+.pays-bande::after{right:0;background:linear-gradient(270deg,var(--vert-fonce),transparent);}
+.pays-defile{display:flex;width:max-content;animation:defile 42s linear infinite;}
+.pays-defile:hover{animation-play-state:paused;}
+.pays-groupe{display:flex;align-items:center;gap:26px;padding-right:26px;}
+.pays-item{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:.85rem;font-weight:500;}
+.pays-item .drapeau{font-size:1.25rem;line-height:1;}
+@keyframes defile{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion:reduce){
+  .pays-defile{animation:none;flex-wrap:wrap;width:auto;justify-content:center;}
+}
+
+/* ---- Sommaire latéral, ordinateur et tablette ---- */
+.sommaire{display:none;}
+@media(min-width:1180px){
+  .sommaire{
+    display:block;position:fixed;right:22px;top:50%;transform:translateY(-50%);
+    z-index:50;padding:0;margin:0;list-style:none;
+  }
+  .sommaire li{margin:0 0 3px;}
+  .sommaire a{
+    display:flex;align-items:center;gap:9px;justify-content:flex-end;
+    text-decoration:none;color:var(--encre-doux);font-size:.74rem;font-weight:500;
+    padding:5px 0;opacity:.5;transition:opacity .2s ease,color .2s ease;
+  }
+  .sommaire .texte{
+    max-width:0;overflow:hidden;white-space:nowrap;
+    transition:max-width .28s ease;
+  }
+  .sommaire .point{
+    width:8px;height:8px;flex:0 0 8px;border-radius:50%;
+    background:var(--trait);border:1.5px solid var(--trait);
+    transition:background .2s ease,border-color .2s ease,transform .2s ease;
+  }
+  .sommaire:hover a,.sommaire a:focus-visible{opacity:1;}
+  .sommaire:hover .texte,.sommaire a:focus-visible .texte{max-width:170px;}
+  .sommaire a.actif{opacity:1;color:var(--vert-fonce);font-weight:700;}
+  .sommaire a.actif .point{background:var(--vert);border-color:var(--vert);transform:scale(1.35);}
+}
+
+/* ---- Pot flottant, ordinateur et tablette ---- */
+.pot-flottant{display:none;}
+@media(min-width:1180px){
+  .pot-flottant{
+    display:block;position:fixed;left:22px;bottom:22px;z-index:50;
+    width:104px;height:104px;border-radius:50%;overflow:hidden;
+    box-shadow:0 12px 30px rgba(10,74,34,.28);border:3px solid var(--blanc);
+    opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;
+    transition:opacity .35s ease,transform .35s cubic-bezier(.22,.9,.3,1);
+    animation:flotte 4.5s ease-in-out infinite;
+  }
+  .pot-flottant.visible{opacity:1;transform:none;pointer-events:auto;}
+  .pot-flottant img{width:100%;height:100%;object-fit:cover;display:block;}
+}
+@keyframes flotte{0%,100%{margin-bottom:0;}50%{margin-bottom:12px;}}
+@media (prefers-reduced-motion:reduce){.pot-flottant{animation:none;}}
+
+/* ---- Bandeau des histoires longues ---- */
+.histoires{
+  background:linear-gradient(165deg,var(--vert-fonce),#063017);
+  color:#EAF3EA;padding:clamp(48px,8vw,86px) 0;
+}
+.histoires h2{color:var(--blanc);text-align:center;}
+.histoires .intro{text-align:center;color:#BDD2BE;max-width:56ch;margin:0 auto 40px;font-size:.98rem;}
+.histoires-duo{display:grid;gap:22px;max-width:920px;margin:0 auto;}
+@media(min-width:820px){.histoires-duo{grid-template-columns:1fr 1fr;}}
+.histoire{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--rayon);padding:clamp(24px,4vw,34px);text-align:center;
+}
+.histoire .an{font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--or);}
+.histoire .duree{
+  font-family:'Fraunces',serif;font-weight:700;color:var(--blanc);
+  font-size:clamp(2.2rem,7vw,3.1rem);line-height:1.05;margin:12px 0 2px;
+}
+.histoire .duree small{display:block;font-family:'Karla',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.04em;color:#BDD2BE;text-transform:uppercase;margin-top:4px;}
+.histoire .fleche{color:var(--or);font-size:1.5rem;line-height:1;margin:14px 0;}
+.histoire .resultat{
+  font-family:'Fraunces',serif;font-weight:700;color:var(--or);
+  font-size:clamp(1.5rem,4.5vw,2rem);line-height:1.15;
+}
+.histoire .resultat small{display:block;font-family:'Karla',sans-serif;font-size:.82rem;font-weight:500;color:#BDD2BE;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+.histoires-clore{text-align:center;margin:40px auto 0;max-width:56ch;}
+.histoires-clore p{font-size:clamp(1.05rem,2.8vw,1.28rem);font-weight:700;color:var(--blanc);margin:0 0 10px;}
+.histoires-clore .mention{font-size:.8rem;color:#A8C0AA;font-weight:400;}
+.carte{padding:0;overflow:hidden;}
+.carte .corps{padding:22px 22px 26px;}
+.carte .visuel{aspect-ratio:4/3;background:var(--vert-voile);}
+.carte .visuel img{width:100%;height:100%;object-fit:cover;display:block;}
+.carte .visuel .maquette{height:100%;min-height:0;border:0;border-bottom:2px dashed var(--vert);border-radius:0;}
+
 /* Deux colonnes, ce que le produit fait et ne promet pas. */
 .franchise{display:grid;gap:20px;margin-top:34px;}
 @media(min-width:820px){.franchise{grid-template-columns:1fr 1fr;}}
@@ -406,6 +508,40 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 .etat.ok{display:block;background:var(--vert-pale);color:var(--vert-fonce);}
 .etat.ko{display:block;background:#FBEDE6;color:#9A4116;}
 
+/* ---- Champ pays avec suggestions ---- */
+.champ-suggest{position:relative;}
+.suggestions{
+  position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;
+  background:var(--blanc);border:1.6px solid var(--vert);border-radius:10px;
+  max-height:230px;overflow-y:auto;box-shadow:0 12px 30px rgba(10,74,34,.16);
+  display:none;
+}
+.suggestions.ouverte{display:block;}
+.suggestions li{
+  list-style:none;padding:11px 14px;cursor:pointer;font-size:.94rem;
+  display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--vert-voile);
+}
+.suggestions li:last-child{border-bottom:0;}
+.suggestions li:hover,.suggestions li.survol{background:var(--vert-pale);}
+.suggestions li .ind{margin-left:auto;color:var(--encre-doux);font-size:.85rem;}
+.suggestions ul{margin:0;padding:0;}
+
+/* ---- Téléphone avec indicatif ---- */
+.tel-groupe{display:flex;gap:8px;}
+.tel-groupe .indicatif{
+  flex:0 0 96px;text-align:center;font-weight:700;background:var(--vert-pale);
+  border-color:#C6DEC8;
+}
+.tel-groupe input[type=tel]{flex:1;}
+
+/* ---- Note sous un champ ---- */
+.note-champ{
+  margin:7px 0 0;font-size:.79rem;color:var(--encre-doux);
+  padding:9px 12px;background:var(--vert-voile);border-left:2px solid var(--or);border-radius:0 8px 8px 0;
+}
+.champ-cache{display:none;}
+.champ-cache.visible{display:block;}
+
 /* Pied de page. */
 .pied{background:var(--encre);color:#A9BCAC;padding:clamp(44px,7vw,70px) 0 34px;font-size:.9rem;}
 .pied .grille{display:grid;gap:26px;}
@@ -420,7 +556,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
   @page{size:A4 portrait;margin:14mm 12mm;}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   body{background:#fff;font-size:11pt;padding-bottom:0;}
-  .entete,.barre-pouce,.bouton,.aide-curseur,.form-carte .bouton,.video-cadre,.carrousel-bloc{display:none !important;}
+  .entete,.barre-pouce,.bouton,.aide-curseur,.form-carte .bouton,.video-cadre,.carrousel-bloc,.sommaire,.pot-flottant,.pays-bande,.suggestions{display:none !important;}
   .apparait{opacity:1 !important;transform:none !important;}
   .bloc{padding:14px 0 !important;break-inside:avoid;page-break-inside:avoid;}
   .carte,.doc,.geste,.prix-carte,.form-carte,.comparateur,.maquette,.faq details{break-inside:avoid;page-break-inside:avoid;}
@@ -490,40 +626,107 @@ alt=""></noscript>
   </div>
 </section>
 
+<!-- ============ Bandeau des pays livrés ============ -->
+<div class="pays-bande" aria-label="Pays où Kelostop est livré.">
+  <div class="pays-defile">
+    <div class="pays-groupe" id="pays-groupe-1">
+      <span class="pays-item"><span class="drapeau">🇨🇮</span>Côte d'Ivoire</span>
+      <span class="pays-item"><span class="drapeau">🇸🇳</span>Sénégal</span>
+      <span class="pays-item"><span class="drapeau">🇲🇱</span>Mali</span>
+      <span class="pays-item"><span class="drapeau">🇧🇫</span>Burkina Faso</span>
+      <span class="pays-item"><span class="drapeau">🇬🇳</span>Guinée</span>
+      <span class="pays-item"><span class="drapeau">🇧🇯</span>Bénin</span>
+      <span class="pays-item"><span class="drapeau">🇹🇬</span>Togo</span>
+      <span class="pays-item"><span class="drapeau">🇳🇪</span>Niger</span>
+      <span class="pays-item"><span class="drapeau">🇬🇭</span>Ghana</span>
+      <span class="pays-item"><span class="drapeau">🇬🇼</span>Guinée-Bissau</span>
+      <span class="pays-item"><span class="drapeau">🇬🇲</span>Gambie</span>
+      <span class="pays-item"><span class="drapeau">🇱🇷</span>Liberia</span>
+      <span class="pays-item"><span class="drapeau">🇸🇱</span>Sierra Leone</span>
+      <span class="pays-item"><span class="drapeau">🇲🇷</span>Mauritanie</span>
+      <span class="pays-item"><span class="drapeau">🇨🇻</span>Cap-Vert</span>
+      <span class="pays-item"><span class="drapeau">🇨🇲</span>Cameroun</span>
+      <span class="pays-item"><span class="drapeau">🇨🇬</span>Congo</span>
+      <span class="pays-item"><span class="drapeau">🇨🇩</span>RD Congo</span>
+      <span class="pays-item"><span class="drapeau">🇬🇦</span>Gabon</span>
+      <span class="pays-item"><span class="drapeau">🇫🇷</span>France</span>
+      <span class="pays-item"><span class="drapeau">🇨🇭</span>Suisse</span>
+      <span class="pays-item"><span class="drapeau">🇧🇪</span>Belgique</span>
+      <span class="pays-item"><span class="drapeau">🇭🇹</span>Haïti</span>
+    </div>
+  </div>
+</div>
+
 <section class="stat-clients apparait">
-  <div class="chiffre">+ XXX</div>
+  <div class="chiffre">+ 9 000</div>
   <div class="libelle">Clients satisfaits</div>
-  <p class="place">Emplacement provisoire. Le chiffre exact remplacera "XXX" dès confirmation.</p>
+  <p class="place">Depuis 2012, en Côte d'Ivoire et à l'international.</p>
 </section>
 
 <!-- ============ 3. Le problème ============ -->
-<section class="bloc bloc--clair">
+<section class="bloc bloc--clair" id="probleme">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Vous n'êtes pas seule.</p>
-      <h2>Ça démange, ça tire, et ça se voit.</h2>
-      <p class="chapo">Une chéloïde n'est pas qu'une marque sur la peau. C'est le geste de cacher son oreille, la robe qu'on ne met plus, la main qui remonte sans arrêt vers l'épaule.</p>
+      <h2>Ça <span class="fort">démange</span>, ça <span class="fort">tire</span>, et ça <span class="fort">se voit</span>.</h2>
+      <p class="chapo">Une chéloïde n'est pas qu'une marque sur la peau. C'est le geste de <span class="fort">cacher</span> son oreille, la robe qu'on ne met plus, la main qui remonte sans arrêt vers l'épaule.</p>
     </div>
     <div class="cartes cartes--4">
       <article class="carte apparait">
-        <span class="zone">01</span>
-        <h3>L'oreille.</h3>
-        <p>Après un piercing, une petite boule apparaît et grossit. Les boucles d'oreilles deviennent impossibles à porter.</p>
+        <div class="visuel">
+          <div class="maquette">
+            <span class="code">ZONE 01</span>
+            <span class="titre">L'oreille.</span>
+            <span class="note">Gros plan sur une oreille, cadrage serré, jamais le visage entier.</span>
+          </div>
+        </div>
+        <div class="corps">
+          <span class="zone">01</span>
+          <h3>L'oreille.</h3>
+          <p>Après un piercing, une petite boule apparaît et grossit. Les boucles d'oreilles deviennent impossibles à porter.</p>
+        </div>
       </article>
       <article class="carte apparait">
-        <span class="zone">02</span>
-        <h3>L'épaule et le dos.</h3>
-        <p>La marque tire quand vous bougez. Les bretelles et les sacs frottent toute la journée.</p>
+        <div class="visuel">
+          <div class="maquette">
+            <span class="code">ZONE 02</span>
+            <span class="titre">L'épaule et le dos.</span>
+            <span class="note">Cadrage sur l'épaule, même lumière que les autres zones.</span>
+          </div>
+        </div>
+        <div class="corps">
+          <span class="zone">02</span>
+          <h3>L'épaule et le dos.</h3>
+          <p>La marque <span class="fort">tire</span> quand vous bougez. Les bretelles et les sacs frottent toute la journée.</p>
+        </div>
       </article>
       <article class="carte apparait">
-        <span class="zone">03</span>
-        <h3>La poitrine.</h3>
-        <p>La zone la plus difficile à cacher. Les décolletés et les tenues de fête restent dans l'armoire.</p>
+        <div class="visuel">
+          <div class="maquette">
+            <span class="code">ZONE 03</span>
+            <span class="titre">La poitrine.</span>
+            <span class="note">Cadrage pudique, uniquement la zone concernée.</span>
+          </div>
+        </div>
+        <div class="corps">
+          <span class="zone">03</span>
+          <h3>La poitrine.</h3>
+          <p>La zone la plus difficile à <span class="fort">cacher</span>. Les décolletés et les tenues de fête restent dans l'armoire.</p>
+        </div>
       </article>
       <article class="carte apparait">
-        <span class="zone">04</span>
-        <h3>Le visage et le cou.</h3>
-        <p>Impossible à dissimuler. Le regard des autres se pose là avant de croiser le vôtre.</p>
+        <div class="visuel">
+          <div class="maquette">
+            <span class="code">ZONE 04</span>
+            <span class="titre">Le visage et le cou.</span>
+            <span class="note">Cadrage serré sur le cou, accord écrit obligatoire si le visage apparaît.</span>
+          </div>
+        </div>
+        <div class="corps">
+          <span class="zone">04</span>
+          <h3>Le visage et le cou.</h3>
+          <p>Impossible à dissimuler. Le regard des autres <span class="fort">se pose là</span> avant de croiser le vôtre.</p>
+        </div>
       </article>
     </div>
     <div class="apparait" style="margin-top:34px;padding:22px 24px;background:var(--vert-voile);border-left:3px solid var(--or);border-radius:0 10px 10px 0;">
@@ -566,7 +769,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 5. Le produit ============ -->
-<section class="bloc bloc--clair">
+<section class="bloc bloc--clair" id="produit">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Le produit.</p>
@@ -597,7 +800,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 6. Le rituel ============ -->
-<section class="bloc">
+<section class="bloc" id="rituel">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Mode d'emploi.</p>
@@ -636,7 +839,35 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 7. Preuves vivantes ============ -->
-<section class="bloc bloc--clair">
+<!-- ============ Les histoires longues ============ -->
+<section class="histoires" id="histoires">
+  <div class="enveloppe">
+    <div class="apparait">
+      <h2>Certaines cicatrices sont là depuis très longtemps.</h2>
+      <p class="intro">Deux cas racontés par Atta Kouassi Isac, le fabricant, parmi les personnes qu'il a suivies.</p>
+    </div>
+    <div class="histoires-duo">
+      <article class="histoire apparait">
+        <div class="an">Suivi en 2011</div>
+        <div class="duree">14 ans<small>avec la cicatrice</small></div>
+        <div class="fleche">↓</div>
+        <div class="resultat">Traitée en 2 semaines<small>selon le fabricant</small></div>
+      </article>
+      <article class="histoire apparait">
+        <div class="an">Suivi en 2018</div>
+        <div class="duree">22 ans<small>avec la cicatrice</small></div>
+        <div class="fleche">↓</div>
+        <div class="resultat">Traitée en 1 mois<small>selon le fabricant</small></div>
+      </article>
+    </div>
+    <div class="histoires-clore apparait">
+      <p>Quelle que soit l'ancienneté de votre cicatrice, parlons-en.</p>
+      <p class="mention">Ces deux cas sont rapportés par le fabricant et ne sont pas accompagnés de documents. Ils ne constituent ni une garantie, ni une promesse de résultat. Chaque peau réagit différemment.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bloc bloc--clair" id="preuves">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Preuves vivantes.</p>
@@ -667,7 +898,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 8. Le fabricant ============ -->
-<section class="bloc bloc--vert">
+<section class="bloc bloc--vert" id="fabricant">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Qui fabrique Kelostop.</p>
@@ -762,7 +993,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 9. Le prix et la livraison ============ -->
-<section class="bloc">
+<section class="bloc" id="prix">
   <div class="enveloppe">
     <div class="apparait" style="text-align:center;">
       <p class="surtitre" style="justify-content:center;">Le prix.</p>
@@ -781,7 +1012,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 10. Les questions fréquentes ============ -->
-<section class="bloc bloc--clair">
+<section class="bloc bloc--clair" id="faq">
   <div class="enveloppe">
     <div class="apparait">
       <p class="surtitre">Vos questions.</p>
@@ -839,37 +1070,60 @@ alt=""></noscript>
             <label for="prenom">Prénom.</label>
             <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
           </div>
+
+          <div class="demi champ-suggest">
+            <label for="pays">Votre pays.</label>
+            <input type="text" id="pays" name="pays" required autocomplete="off" placeholder="Tapez les premières lettres" aria-autocomplete="list" aria-controls="liste-pays" aria-expanded="false" role="combobox">
+            <div class="suggestions" id="liste-pays" role="listbox"><ul></ul></div>
+          </div>
+
           <div class="demi">
             <label for="contact">Numéro WhatsApp.</label>
-            <input type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="Exemple : 07 00 00 00 00">
+            <div class="tel-groupe">
+              <input type="text" id="indicatif" name="indicatif" class="indicatif" value="+225" autocomplete="off" aria-label="Indicatif du pays.">
+              <input type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="07 00 00 00 00">
+            </div>
           </div>
-          <div class="demi">
-            <label for="localisation">Où êtes-vous ?</label>
-            <input type="text" id="localisation" name="localisation" required placeholder="Quartier, ville, pays">
+
+          <div class="plein">
+            <label for="localisation">Localisation exacte pour la livraison.</label>
+            <input type="text" id="localisation" name="localisation" required placeholder="Ville, quartier, point de repère">
           </div>
+
           <div class="demi">
-            <label for="zone">Zone concernée.</label>
+            <label for="zone">Où se situe la cicatrice ?</label>
             <select id="zone" name="zone" required>
               <option value="">Choisissez.</option>
               <option>Oreille.</option>
+              <option>Visage.</option>
+              <option>Cou.</option>
+              <option>Nuque, derrière la tête.</option>
               <option>Épaule ou bras.</option>
               <option>Dos.</option>
               <option>Poitrine.</option>
-              <option>Visage ou cou.</option>
               <option>Ventre.</option>
+              <option>Jambe.</option>
+              <option>Pied.</option>
               <option>Plusieurs zones.</option>
               <option>Autre.</option>
             </select>
+            <div class="champ-cache" id="bloc-zone-autre">
+              <label for="zone_autre" style="margin-top:12px;">Précisez où exactement.</label>
+              <input type="text" id="zone_autre" name="zone_autre" placeholder="Décrivez l'endroit avec vos mots">
+            </div>
           </div>
+
           <div class="demi">
-            <label for="anciennete">Depuis combien de temps ?</label>
+            <label for="anciennete">Depuis quand avez-vous la cicatrice ?</label>
             <select id="anciennete" name="anciennete" required>
               <option value="">Choisissez.</option>
               <option>Moins de six mois.</option>
               <option>Entre six mois et deux ans.</option>
               <option>Entre deux et cinq ans.</option>
-              <option>Plus de cinq ans.</option>
+              <option>Entre cinq et dix ans.</option>
+              <option>Plus de dix ans.</option>
             </select>
+            <p class="note-champ">Le fabricant a suivi une personne qui vivait avec sa cicatrice depuis vingt-deux ans. Peu importe l'ancienneté, parlons-en.</p>
           </div>
         </div>
 
@@ -906,6 +1160,27 @@ alt=""></noscript>
 </footer>
 
 <!-- ============ Barre fixe, pour le pouce ============ -->
+<!-- ============ Sommaire latéral, ordinateur ============ -->
+<nav aria-label="Sommaire de la page">
+  <ul class="sommaire" id="sommaire">
+    <li><a href="#haut"><span class="texte">Accueil</span><span class="point"></span></a></li>
+    <li><a href="#probleme"><span class="texte">Le problème</span><span class="point"></span></a></li>
+    <li><a href="#preuve"><span class="texte">La preuve</span><span class="point"></span></a></li>
+    <li><a href="#produit"><span class="texte">Le produit</span><span class="point"></span></a></li>
+    <li><a href="#rituel"><span class="texte">Mode d'emploi</span><span class="point"></span></a></li>
+    <li><a href="#preuves"><span class="texte">Preuves vivantes</span><span class="point"></span></a></li>
+    <li><a href="#fabricant"><span class="texte">Le fabricant</span><span class="point"></span></a></li>
+    <li><a href="#prix"><span class="texte">Le prix</span><span class="point"></span></a></li>
+    <li><a href="#faq"><span class="texte">Vos questions</span><span class="point"></span></a></li>
+    <li><a href="#commander"><span class="texte">Commander</span><span class="point"></span></a></li>
+  </ul>
+</nav>
+
+<!-- ============ Pot flottant, ordinateur ============ -->
+<a class="pot-flottant" id="pot-flottant" href="#commander" aria-label="Commander Kelostop.">
+  <img src="images/pot-kelostop.jpg" alt="Pot de crème Kelostop.">
+</a>
+
 <div class="barre-pouce">
   <div class="prix">22 500 FCFA<small>Livré gratuitement à Abidjan.</small></div>
   <a class="bouton" href="#commander">Commander.</a>
@@ -935,6 +1210,181 @@ alt=""></noscript>
     var bouge = function(){ comp.style.setProperty('--pos', curseur.value + '%'); };
     curseur.addEventListener('input', bouge);
     bouge();
+  }
+
+  /* ---- Sommaire latéral, section active ---- */
+  var liens = document.querySelectorAll('#sommaire a');
+  if(liens.length){
+    var cibles = [];
+    liens.forEach(function(a){
+      var s = document.querySelector(a.getAttribute('href'));
+      if(s) cibles.push({lien:a, section:s});
+    });
+    var majSommaire = function(){
+      var repere = window.scrollY + window.innerHeight*0.32;
+      var actif = cibles[0];
+      cibles.forEach(function(c){
+        if(c.section.offsetTop <= repere) actif = c;
+      });
+      cibles.forEach(function(c){ c.lien.classList.toggle('actif', c === actif); });
+    };
+    window.addEventListener('scroll', majSommaire, {passive:true});
+    window.addEventListener('resize', majSommaire, {passive:true});
+    majSommaire();
+  }
+
+  /* ---- Pot flottant, apparition après l'accroche ---- */
+  var pot = document.getElementById('pot-flottant');
+  if(pot){
+    var majPot = function(){
+      pot.classList.toggle('visible', window.scrollY > window.innerHeight*0.75);
+    };
+    window.addEventListener('scroll', majPot, {passive:true});
+    majPot();
+  }
+
+  /* ---- Champ pays, suggestions et indicatif ---- */
+  var PAYS = [
+    ['Côte d\u2019Ivoire','+225','🇨🇮'],['Sénégal','+221','🇸🇳'],['Mali','+223','🇲🇱'],
+    ['Burkina Faso','+226','🇧🇫'],['Guinée','+224','🇬🇳'],['Bénin','+229','🇧🇯'],
+    ['Togo','+228','🇹🇬'],['Niger','+227','🇳🇪'],['Ghana','+233','🇬🇭'],
+    ['Guinée-Bissau','+245','🇬🇼'],['Gambie','+220','🇬🇲'],['Liberia','+231','🇱🇷'],
+    ['Sierra Leone','+232','🇸🇱'],['Mauritanie','+222','🇲🇷'],['Cap-Vert','+238','🇨🇻'],
+    ['Nigeria','+234','🇳🇬'],['Cameroun','+237','🇨🇲'],['Congo','+242','🇨🇬'],
+    ['RD Congo','+243','🇨🇩'],['Gabon','+241','🇬🇦'],['Tchad','+235','🇹🇩'],
+    ['Centrafrique','+236','🇨🇫'],['Guinée équatoriale','+240','🇬🇶'],
+    ['France','+33','🇫🇷'],['Belgique','+32','🇧🇪'],['Suisse','+41','🇨🇭'],
+    ['Canada','+1','🇨🇦'],['Haïti','+509','🇭🇹'],['Maroc','+212','🇲🇦'],
+    ['Algérie','+213','🇩🇿'],['Tunisie','+216','🇹🇳'],['Madagascar','+261','🇲🇬'],
+    ['Îles Maurice','+230','🇲🇺'],['Kenya','+254','🇰🇪'],['Afrique du Sud','+27','🇿🇦'],
+    ['États-Unis','+1','🇺🇸'],['Royaume-Uni','+44','🇬🇧'],['Italie','+39','🇮🇹'],
+    ['Espagne','+34','🇪🇸'],['Allemagne','+49','🇩🇪'],['Portugal','+351','🇵🇹']
+  ];
+
+  var champPays = document.getElementById('pays');
+  var champInd = document.getElementById('indicatif');
+  var boite = document.getElementById('liste-pays');
+
+  if(champPays && champInd && boite){
+    var listeUl = boite.querySelector('ul');
+    var indexSurvol = -1;
+    var visibles = [];
+
+    /* Retire accents et met en minuscules, pour tolérer les fautes. */
+    var simplifie = function(t){
+      return (t||'').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]/g,'');
+    };
+
+    /* Distance de Levenshtein, pour rattraper les fautes de frappe. */
+    var distance = function(a,b){
+      var m=a.length, n=b.length;
+      if(!m) return n;
+      if(!n) return m;
+      var d=[], i, j;
+      for(i=0;i<=m;i++) d[i]=[i];
+      for(j=0;j<=n;j++) d[0][j]=j;
+      for(i=1;i<=m;i++){
+        for(j=1;j<=n;j++){
+          var c = a.charAt(i-1)===b.charAt(j-1) ? 0 : 1;
+          d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+c);
+        }
+      }
+      return d[m][n];
+    };
+
+    var chercher = function(saisie){
+      var s = simplifie(saisie);
+      if(!s) return PAYS.slice(0,8);
+      var notes = PAYS.map(function(p){
+        var nom = simplifie(p[0]);
+        var note;
+        if(nom.indexOf(s) === 0) note = 0;
+        else if(nom.indexOf(s) > 0) note = 1;
+        else note = 2 + distance(s, nom.slice(0, Math.max(s.length,1)));
+        return {pays:p, note:note};
+      });
+      notes.sort(function(a,b){ return a.note - b.note; });
+      return notes.filter(function(x){ return x.note <= 4; }).slice(0,8).map(function(x){ return x.pays; });
+    };
+
+    var dessiner = function(resultats){
+      visibles = resultats;
+      indexSurvol = -1;
+      listeUl.innerHTML = '';
+      if(!resultats.length){ boite.classList.remove('ouverte'); champPays.setAttribute('aria-expanded','false'); return; }
+      resultats.forEach(function(p,i){
+        var li = document.createElement('li');
+        li.setAttribute('role','option');
+        li.innerHTML = '<span>'+p[2]+'</span><span>'+p[0]+'</span><span class="ind">'+p[1]+'</span>';
+        li.addEventListener('mousedown', function(ev){
+          ev.preventDefault();
+          choisir(p);
+        });
+        listeUl.appendChild(li);
+      });
+      boite.classList.add('ouverte');
+      champPays.setAttribute('aria-expanded','true');
+    };
+
+    var choisir = function(p){
+      champPays.value = p[0];
+      champInd.value = p[1];
+      boite.classList.remove('ouverte');
+      champPays.setAttribute('aria-expanded','false');
+    };
+
+    var fermer = function(){
+      boite.classList.remove('ouverte');
+      champPays.setAttribute('aria-expanded','false');
+    };
+
+    champPays.addEventListener('input', function(){ dessiner(chercher(champPays.value)); });
+    champPays.addEventListener('focus', function(){ dessiner(chercher(champPays.value)); });
+    champPays.addEventListener('blur', function(){ window.setTimeout(fermer, 120); });
+
+    champPays.addEventListener('keydown', function(ev){
+      var items = listeUl.querySelectorAll('li');
+      if(!items.length) return;
+      if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+        ev.preventDefault();
+        indexSurvol += (ev.key === 'ArrowDown' ? 1 : -1);
+        if(indexSurvol < 0) indexSurvol = items.length-1;
+        if(indexSurvol >= items.length) indexSurvol = 0;
+        items.forEach(function(li,i){ li.classList.toggle('survol', i === indexSurvol); });
+      } else if(ev.key === 'Enter'){
+        if(indexSurvol >= 0 && visibles[indexSurvol]){
+          ev.preventDefault();
+          choisir(visibles[indexSurvol]);
+        }
+      } else if(ev.key === 'Escape'){
+        fermer();
+      }
+    });
+
+    /* L'inverse : on tape un indicatif, le pays se remplit. */
+    champInd.addEventListener('input', function(){
+      var v = champInd.value.trim();
+      if(v && v.charAt(0) !== '+') { v = '+'+v.replace(/\D/g,''); champInd.value = v; }
+      var trouve = PAYS.filter(function(p){ return p[1] === v; });
+      if(trouve.length === 1) champPays.value = trouve[0][0];
+    });
+  }
+
+  /* ---- Champ libre si la zone est "Autre" ---- */
+  var selZone = document.getElementById('zone');
+  var blocAutre = document.getElementById('bloc-zone-autre');
+  var champAutre = document.getElementById('zone_autre');
+  if(selZone && blocAutre && champAutre){
+    var majZone = function(){
+      var estAutre = selZone.value.indexOf('Autre') === 0;
+      blocAutre.classList.toggle('visible', estAutre);
+      champAutre.required = estAutre;
+      if(!estAutre) champAutre.value = '';
+    };
+    selZone.addEventListener('change', majZone);
+    majZone();
   }
 
   /* ---- Carrousel de la cérémonie ---- */
@@ -987,13 +1437,19 @@ alt=""></noscript>
       bouton.disabled = true;
       bouton.textContent = 'Un instant.';
 
+      var zoneTexte = (d.get('zone')||'');
+      if(zoneTexte.indexOf('Autre') === 0 && d.get('zone_autre')){
+        zoneTexte = 'Autre : ' + d.get('zone_autre');
+      }
+
       var texte =
         'Bonjour, je viens du site Kelostop et je souhaite commander.' + '\n\n' +
         'Nom : ' + (d.get('nom')||'') + '\n' +
         'Prénom : ' + (d.get('prenom')||'') + '\n' +
-        'Contact : ' + (d.get('contact')||'') + '\n' +
-        'Localisation : ' + (d.get('localisation')||'') + '\n' +
-        'Zone concernée : ' + (d.get('zone')||'') + '\n' +
+        'Pays : ' + (d.get('pays')||'') + '\n' +
+        'Contact : ' + (d.get('indicatif')||'') + ' ' + (d.get('contact')||'') + '\n' +
+        'Localisation pour la livraison : ' + (d.get('localisation')||'') + '\n' +
+        'Où se situe la cicatrice : ' + zoneTexte + '\n' +
         'Depuis : ' + (d.get('anciennete')||'');
 
       var lien = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(texte);
