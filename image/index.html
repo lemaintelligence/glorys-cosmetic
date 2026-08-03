@@ -188,6 +188,20 @@ body{padding-bottom:86px;}
 .accroche h1 em{font-style:normal;color:var(--vert);}
 .accroche .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;}
 .rassure{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:26px;padding-top:20px;border-top:1px solid var(--trait);}
+
+.stat-clients{
+  text-align:center;padding:clamp(30px,6vw,50px) var(--pad);
+  background:var(--vert-pale);border-top:1px solid var(--trait);border-bottom:1px solid var(--trait);
+}
+.stat-clients .chiffre{
+  font-family:'Fraunces',serif;font-weight:700;color:var(--vert);
+  font-size:clamp(2.8rem,10vw,4.6rem);line-height:1;
+}
+.stat-clients .libelle{
+  margin-top:8px;font-size:clamp(1rem,2.6vw,1.25rem);font-weight:700;color:var(--vert-fonce);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.stat-clients .place{font-size:.78rem;color:var(--encre-doux);margin-top:6px;}
 .rassure span{display:flex;align-items:center;gap:7px;font-size:.87rem;font-weight:500;color:var(--encre-doux);}
 .puce{width:17px;height:17px;flex:0 0 17px;border-radius:50%;background:var(--vert-pale);display:grid;place-items:center;}
 .puce svg{width:10px;height:10px;stroke:var(--vert);stroke-width:3;fill:none;}
@@ -463,6 +477,12 @@ alt=""></noscript>
       </div>
     </div>
   </div>
+</section>
+
+<section class="stat-clients apparait">
+  <div class="chiffre">+ XXX</div>
+  <div class="libelle">Clients satisfaits</div>
+  <p class="place">Emplacement provisoire. Le chiffre exact remplacera "XXX" dès confirmation.</p>
 </section>
 
 <!-- ============ 3. Le problème ============ -->
