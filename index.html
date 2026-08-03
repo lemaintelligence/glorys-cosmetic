@@ -253,7 +253,17 @@ body{padding-bottom:86px;}
 /* ============ Cartes génériques ============ */
 .cartes{display:grid;gap:18px;margin-top:34px;}
 @media(min-width:640px){.cartes{grid-template-columns:repeat(2,1fr);}}
-@media(min-width:1000px){.cartes--4{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:1000px){.cartes--4{grid-template-columns:repeat(4,1fr);}
+
+.preuves-grille{column-count:1;column-gap:16px;margin-top:34px;}
+@media(min-width:640px){.preuves-grille{column-count:2;}}
+@media(min-width:1000px){.preuves-grille{column-count:3;}}
+.preuve-piece{
+  break-inside:avoid;margin:0 0 16px;border-radius:var(--rayon);overflow:hidden;
+  box-shadow:0 10px 26px rgba(10,74,34,.12);background:var(--blanc);border:1px solid var(--trait);
+}
+.preuve-piece img{width:100%;height:auto;display:block;}
+.preuve-legende{padding:10px 14px;font-size:.78rem;color:var(--encre-doux);border-top:1px solid var(--trait);}}
 .carte{
   background:var(--blanc);border:1px solid var(--trait);border-radius:var(--rayon);
   padding:26px 24px;transition:transform .2s ease,box-shadow .2s ease;
@@ -434,6 +444,7 @@ t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
 document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1215771723966922');
 fbq('track', 'PageView');
+fbq('track', 'ViewContent', {content_name:'Kelostop', content_category:'Cosmétique', content_type:'product', value:22500, currency:'XOF'});
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1215771723966922&ev=PageView&noscript=1"
@@ -624,19 +635,33 @@ alt=""></noscript>
   </div>
 </section>
 
-<!-- ============ 7. Les témoignages ============ -->
+<!-- ============ 7. Preuves vivantes ============ -->
 <section class="bloc bloc--clair">
   <div class="enveloppe">
     <div class="apparait">
-      <p class="surtitre">Elles en parlent.</p>
-      <h2>Des messages reçus, pas des slogans écrits.</h2>
-      <p class="chapo">Ce sont de vrais commentaires, laissés publiquement. Nous ne les retouchons pas, ni l'orthographe, ni le ton.</p>
+      <p class="surtitre">Preuves vivantes.</p>
+      <h2>Des avis reçus, des colis livrés.</h2>
+      <p class="chapo">Ce sont de vrais messages et de vrais envois, laissés publiquement ou partagés par nos clientes. Nous ne les retouchons pas, ni l'orthographe, ni le ton.</p>
     </div>
-    <div class="cartes">
-      <div class="maquette r43 apparait"><span class="code">IMG 08</span><span class="titre">Capture de commentaire.</span><span class="note">Capture nette, prise sur téléphone. Masquer la photo de profil si la personne n'a pas donné son accord.</span></div>
-      <div class="maquette r43 apparait"><span class="code">IMG 09</span><span class="titre">Capture de commentaire.</span><span class="note">Choisir un commentaire qui parle des démangeaisons.</span></div>
-      <div class="maquette r43 apparait"><span class="code">IMG 10</span><span class="titre">Capture de commentaire.</span><span class="note">Choisir un commentaire qui parle du retour après une opération.</span></div>
-      <div class="maquette r43 apparait"><span class="code">IMG 11</span><span class="titre">Capture de commentaire.</span><span class="note">Choisir un commentaire d'une cliente qui a recommandé le produit.</span></div>
+    <div class="preuves-grille">
+      <div class="preuve-piece apparait">
+        <img src="images/preuve-avis-elie.jpg" alt="Avis Facebook d'Elie Issiaka Bamba sur Kelostop : très très bon produit." loading="lazy">
+      </div>
+      <div class="preuve-piece apparait">
+        <img src="images/preuve-avis-davy.jpg" alt="Avis Facebook de Davy Os M'bissa sur Kelostop, remède contre les chéloïdes." loading="lazy">
+      </div>
+      <div class="preuve-piece apparait">
+        <img src="images/preuve-livraison-dhl.jpg" alt="Colis Kelostop envoyé par DHL, preuve de livraison internationale." loading="lazy">
+        <p class="preuve-legende">Une expédition internationale, par DHL.</p>
+      </div>
+      <div class="preuve-piece apparait">
+        <img src="images/preuve-whatsapp-sama.jpg" alt="Échange WhatsApp avec une cliente, pot Kelostop et bordereau d'envoi Sama Transport." loading="lazy">
+        <p class="preuve-legende">Confirmation d'envoi, directement sur WhatsApp.</p>
+      </div>
+      <div class="preuve-piece apparait">
+        <img src="images/preuve-recu-tsr.jpg" alt="Reçu d'expédition Kelostop par courrier express, à Abidjan." loading="lazy">
+        <p class="preuve-legende">Un envoi de plus, par courrier express à Abidjan.</p>
+      </div>
     </div>
   </div>
 </section>
