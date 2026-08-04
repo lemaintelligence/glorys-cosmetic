@@ -22,7 +22,9 @@
   --vert-voile:#F5F9F4;
   --or:#C9A227;
   --or-pale:#F3E7BE;
-  --orange:#D2601A;
+  --or-clair:#E8C74A;
+  --or-texte:#8A6D0F;
+  --orange:#8A6D0F;
   --encre:#14261A;
   --encre-doux:#4A5A4E;
   --blanc:#FFFFFF;
@@ -202,7 +204,11 @@ body{padding-bottom:86px;}
   margin-top:8px;font-size:clamp(1rem,2.6vw,1.25rem);font-weight:700;color:var(--vert-fonce);
   text-transform:uppercase;letter-spacing:.06em;
 }
-.stat-clients .place{font-size:.78rem;color:var(--encre-doux);margin-top:6px;}
+.stat-clients .place{font-size:clamp(1rem,3vw,1.32rem);color:var(--encre-doux);margin-top:12px;font-weight:600;}
+.stat-clients .annee-recul{
+  font-family:'Fraunces',serif;font-weight:700;color:var(--or-texte);
+  font-size:1.28em;line-height:1;font-variant-numeric:tabular-nums;
+}
 .rassure span{display:flex;align-items:center;gap:7px;font-size:.87rem;font-weight:500;color:var(--encre-doux);}
 .puce{width:17px;height:17px;flex:0 0 17px;border-radius:50%;background:var(--vert-pale);display:grid;place-items:center;}
 .puce svg{width:10px;height:10px;stroke:var(--vert);stroke-width:3;fill:none;}
@@ -212,7 +218,7 @@ body{padding-bottom:86px;}
   position:relative;max-width:390px;margin:0 auto;
   border-radius:var(--rayon);overflow:hidden;
   box-shadow:0 18px 50px rgba(10,74,34,.2);
-  aspect-ratio:754/1024;isolation:isolate;
+  aspect-ratio:1081/1455;isolation:isolate;
   --pos:50%;
 }
 .comparateur .face{position:absolute;inset:0;}
@@ -254,7 +260,9 @@ body{padding-bottom:86px;}
 /* ============ Cartes génériques ============ */
 .cartes{display:grid;gap:18px;margin-top:34px;}
 @media(min-width:640px){.cartes{grid-template-columns:repeat(2,1fr);}}
-@media(min-width:1000px){.cartes--4{grid-template-columns:repeat(4,1fr);}
+@media(min-width:1000px){.cartes--4{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:1000px){.cartes--6{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:1000px){.cartes--8{grid-template-columns:repeat(4,1fr);}}
 
 .preuves-grille{column-count:1;column-gap:16px;margin-top:34px;}
 @media(min-width:640px){.preuves-grille{column-count:2;}}
@@ -264,7 +272,7 @@ body{padding-bottom:86px;}
   box-shadow:0 10px 26px rgba(10,74,34,.12);background:var(--blanc);border:1px solid var(--trait);
 }
 .preuve-piece img{width:100%;height:auto;display:block;}
-.preuve-legende{padding:10px 14px;font-size:.78rem;color:var(--encre-doux);border-top:1px solid var(--trait);}}
+.preuve-legende{padding:10px 14px;font-size:.78rem;color:var(--encre-doux);border-top:1px solid var(--trait);}
 .carte{
   background:var(--blanc);border:1px solid var(--trait);border-radius:var(--rayon);
   padding:26px 24px;transition:transform .2s ease,box-shadow .2s ease;
@@ -297,11 +305,33 @@ body{padding-bottom:86px;}
 }
 
 /* ---- Sommaire latéral, ordinateur et tablette ---- */
-.sommaire{display:none;}
+/* Sur téléphone et tablette : seulement les pastilles, sur le bord droit. */
+.sommaire{
+  display:block;position:fixed;right:7px;top:50%;transform:translateY(-50%);
+  z-index:50;padding:6px 4px;margin:0;list-style:none;
+  background:rgba(255,255,255,.72);border:1px solid var(--trait);
+  border-radius:999px;backdrop-filter:blur(6px);
+  box-shadow:0 4px 14px rgba(10,74,34,.10);
+}
+.sommaire li{margin:0;}
+.sommaire a{display:block;padding:4px 3px;text-decoration:none;}
+.sommaire .texte{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;
+}
+.sommaire .point{
+  display:block;width:7px;height:7px;border-radius:50%;
+  background:var(--trait);border:1.5px solid var(--trait);
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.sommaire a.actif .point{
+  background:var(--or);border-color:var(--or);transform:scale(1.75);
+  box-shadow:0 0 0 3px rgba(201,162,39,.22);
+}
 @media(min-width:1180px){
   .sommaire{
-    display:block;position:fixed;right:22px;top:50%;transform:translateY(-50%);
-    z-index:50;padding:0;margin:0;list-style:none;
+    right:22px;padding:0;background:none;border:0;
+    border-radius:0;backdrop-filter:none;box-shadow:none;
   }
   .sommaire li{margin:0 0 3px;}
   .sommaire a{
@@ -310,6 +340,7 @@ body{padding-bottom:86px;}
     padding:5px 0;opacity:.5;transition:opacity .2s ease,color .2s ease;
   }
   .sommaire .texte{
+    position:static;width:auto;height:auto;clip:auto;
     max-width:0;overflow:hidden;white-space:nowrap;
     transition:max-width .28s ease;
   }
@@ -321,7 +352,7 @@ body{padding-bottom:86px;}
   .sommaire:hover a,.sommaire a:focus-visible{opacity:1;}
   .sommaire:hover .texte,.sommaire a:focus-visible .texte{max-width:170px;}
   .sommaire a.actif{opacity:1;color:var(--vert-fonce);font-weight:700;}
-  .sommaire a.actif .point{background:var(--vert);border-color:var(--vert);transform:scale(1.35);}
+  .sommaire a.actif .point{background:var(--or);border-color:var(--or);transform:scale(1.75);box-shadow:0 0 0 3px rgba(201,162,39,.22);}
 }
 
 /* ---- Pot flottant, ordinateur et tablette ---- */
@@ -425,35 +456,6 @@ body{padding-bottom:86px;}
 .video-legende{margin-top:10px;font-size:.84rem;color:#C8DBC9;text-align:center;}
 
 /* ---- Carrousel de la cérémonie ---- */
-.carrousel-bloc{margin-top:14px;}
-.carrousel{
-  position:relative;
-}
-.carrousel-piste{
-  display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
-  padding:4px 4px 10px;margin:0 -4px;
-  scrollbar-width:thin;scrollbar-color:var(--or) rgba(255,255,255,.12);
-  -webkit-overflow-scrolling:touch;
-}
-.carrousel-piste::-webkit-scrollbar{height:6px;}
-.carrousel-piste::-webkit-scrollbar-thumb{background:var(--or);border-radius:10px;}
-.carrousel-diapo{
-  flex:0 0 auto;width:min(78%,320px);scroll-snap-align:center;
-  border-radius:10px;overflow:hidden;background:#000;
-  aspect-ratio:16/9;box-shadow:0 8px 22px rgba(0,0,0,.35);
-}
-.carrousel-diapo img{width:100%;height:100%;object-fit:contain;display:block;background:#000;}
-.carrousel-fleches{display:flex;justify-content:center;gap:14px;margin-top:14px;}
-.carrousel-fleche{
-  width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
-  background:rgba(255,255,255,.06);color:#fff;cursor:pointer;
-  display:grid;place-items:center;transition:background .18s ease;
-}
-.carrousel-fleche:hover{background:rgba(255,255,255,.16);}
-.carrousel-fleche svg{width:16px;height:16px;stroke:#fff;stroke-width:2.4;fill:none;}
-.carrousel-compteur{
-  text-align:center;font-size:.78rem;color:#BDD2BE;margin-top:8px;letter-spacing:.04em;
-}
 .avert{
   margin-top:30px;padding:18px 20px;border-left:3px solid var(--or);
   background:rgba(255,255,255,.05);font-size:.88rem;color:#C8DBC9;border-radius:0 8px 8px 0;
@@ -466,7 +468,12 @@ body{padding-bottom:86px;}
   box-shadow:0 16px 40px rgba(201,162,39,.16);
 }
 .prix-carte .montant{font-family:'Fraunces',serif;font-size:clamp(2.6rem,8vw,3.6rem);font-weight:700;color:var(--vert-fonce);line-height:1;}
-.prix-carte .unite{font-size:.95rem;color:var(--encre-doux);margin-bottom:22px;}
+.prix-carte .montant-barre{
+  font-family:'Fraunces',serif;font-size:clamp(1.3rem,4vw,1.7rem);font-weight:600;
+  color:#9AA79C;text-decoration:line-through;text-decoration-thickness:2px;
+  line-height:1;margin-top:8px;
+}
+.prix-carte .unite{font-size:.95rem;color:var(--encre-doux);margin-bottom:22px;margin-top:10px;}
 .livraisons{display:grid;gap:12px;margin:26px 0;text-align:left;}
 .livraisons div{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;background:var(--vert-voile);border-radius:10px;font-size:.92rem;}
 .livraisons b{display:block;}
@@ -551,12 +558,192 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 .pied a:hover{color:var(--or);}
 .pied .legal{margin-top:32px;padding-top:22px;border-top:1px solid rgba(255,255,255,.13);font-size:.79rem;line-height:1.6;}
 
+/* ============ Ajouts du 4 août ============ */
+
+/* Le lien « Commander » du sommaire, en or et vibrant. */
+.sommaire .lien-commander .texte{color:var(--or-texte);font-weight:800;}
+.sommaire .lien-commander .point{
+  background:var(--or);border-color:var(--or);
+  animation:vibre-commander 2.6s ease-in-out .8s infinite;
+}
+.sommaire .lien-commander.actif .point{animation:none;}
+@keyframes vibre-commander{
+  0%,66%,100%{transform:translateX(0) scale(1);box-shadow:0 0 0 0 rgba(201,162,39,.55);}
+  70%{transform:translateX(-1.6px) scale(1.2);}
+  74%{transform:translateX(1.6px) scale(1.2);}
+  78%{transform:translateX(-1.4px) scale(1.15);}
+  82%{transform:translateX(1.4px) scale(1.15);}
+  86%{transform:translateX(0) scale(1.25);box-shadow:0 0 0 6px rgba(201,162,39,0);}
+}
+@media (prefers-reduced-motion:reduce){.sommaire .lien-commander .point{animation:none;}}
+@media(min-width:1180px){
+  .sommaire .lien-commander{opacity:1;}
+}
+
+/* Effet pop sur les boutons de commande. */
+.bouton{animation:pop-bouton 3.4s ease-in-out 1.2s infinite;transform-origin:center;}
+.bouton--fin{animation:none;}
+.entete .bouton--fin{animation:pop-bouton 3.4s ease-in-out 1.2s infinite;}
+.bouton:hover{animation-play-state:paused;}
+.bouton:active{transform:scale(.96);}
+@keyframes pop-bouton{
+  0%,72%,100%{transform:scale(1);box-shadow:0 6px 18px rgba(10,74,34,.18);}
+  78%{transform:scale(1.055);box-shadow:0 10px 26px rgba(201,162,39,.42);}
+  84%{transform:scale(.985);box-shadow:0 6px 18px rgba(10,74,34,.18);}
+  90%{transform:scale(1.025);box-shadow:0 8px 22px rgba(201,162,39,.3);}
+}
+@media (prefers-reduced-motion:reduce){.bouton{animation:none;}}
+
+/* Suite du titre, sous le chapo, exactement la police du titre. */
+.suite-titre{
+  font-family:'Fraunces','Georgia',serif;
+  font-weight:600;
+  line-height:1.12;
+  letter-spacing:-.015em;
+  font-variation-settings:'opsz' 96;
+  font-size:clamp(2.1rem,6.4vw,3.9rem);
+  color:var(--encre);
+  margin:0 0 .5em;
+}
+
+/* Bloc dépliable, fermé tant qu'on ne touche pas le titre. */
+.depliant{
+  border:1.4px solid var(--trait);border-radius:var(--rayon);
+  background:var(--vert-voile);overflow:hidden;
+}
+.depliant[open]{border-color:var(--or-pale);background:var(--blanc);}
+.depliant-titre{
+  list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;
+  padding:14px 16px;font-weight:700;font-size:.92rem;color:var(--vert-fonce);
+}
+.depliant-titre::-webkit-details-marker{display:none;}
+.depliant-titre:hover{color:var(--or-texte);}
+.depliant-signe{
+  position:relative;flex:none;width:19px;height:19px;border-radius:50%;
+  border:1.8px solid var(--or-texte);
+}
+.depliant-signe::before,.depliant-signe::after{
+  content:"";position:absolute;top:50%;left:50%;background:var(--or-texte);
+  transform:translate(-50%,-50%);transition:opacity .2s ease;
+}
+.depliant-signe::before{width:9px;height:1.8px;}
+.depliant-signe::after{width:1.8px;height:9px;}
+.depliant[open] .depliant-signe::after{opacity:0;}
+.depliant-corps{padding:0 16px 16px;}
+.depliant-aide{
+  margin:0 0 14px;font-size:.8rem;color:var(--encre-doux);
+}
+.depliant-grille{display:grid;gap:14px;}
+@media(min-width:560px){.depliant-grille{grid-template-columns:1fr 1fr;}}
+.depliant textarea{
+  width:100%;font:inherit;font-size:.95rem;color:var(--encre);
+  padding:11px 13px;border:1.4px solid var(--trait);border-radius:10px;
+  background:var(--blanc);resize:vertical;
+}
+.depliant textarea:focus{outline:none;border-color:var(--or-texte);}
+
+/* Le mot mis en avant dans le titre, en jaune or Kelostop. */
+.mot-or{color:var(--or-texte);font-weight:800;}
+
+/* Ondes vertes et jaunes mélangées autour du pot, à l'arrivée sur le site. */
+.pot-ondes{position:relative;isolation:isolate;}
+.pot-ondes::before,.pot-ondes::after{
+  content:"";position:absolute;inset:-6%;z-index:-1;border-radius:50%;
+  background:conic-gradient(from 0deg,
+    rgba(15,116,50,.42), rgba(201,162,39,.42), rgba(232,199,74,.34),
+    rgba(15,116,50,.42), rgba(201,162,39,.42), rgba(15,116,50,.42));
+  filter:blur(16px);
+  animation:onde-souffle 5.5s ease-in-out infinite, onde-tourne 18s linear infinite;
+}
+.pot-ondes::after{
+  inset:-14%;filter:blur(28px);opacity:.62;
+  animation:onde-souffle 5.5s ease-in-out .9s infinite reverse, onde-tourne 26s linear infinite reverse;
+}
+@keyframes onde-souffle{0%,100%{transform:scale(.94);opacity:.55;}50%{transform:scale(1.06);opacity:.95;}}
+@keyframes onde-tourne{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion:reduce){
+  .pot-ondes::before,.pot-ondes::after{animation:none;opacity:.5;}
+}
+
+/* Cadre des photos de zones, carré, pour recevoir les images 1092 sur 1092. */
+.carte .visuel.visuel--carre{aspect-ratio:1/1;}
+.carte .visuel img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* Floutage volontaire, avec un œil pour révéler, comme sur les réseaux. */
+.pudique{position:relative;overflow:hidden;background:var(--vert-voile);}
+.pudique img{
+  transition:filter .32s ease, transform .32s ease;
+  filter:blur(22px) saturate(.85);transform:scale(1.06);
+}
+.pudique.devoile img{filter:none;transform:none;}
+.pudique-voile{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:9px;
+  background:rgba(20,38,26,.34);cursor:pointer;border:0;width:100%;
+  color:#fff;font:inherit;font-size:.82rem;font-weight:600;text-align:center;
+  padding:14px;transition:opacity .3s ease;
+}
+.pudique.devoile .pudique-voile{opacity:0;pointer-events:none;}
+.pudique-voile svg{width:30px;height:30px;stroke:#fff;stroke-width:1.8;fill:none;}
+.pudique-voile span{max-width:210px;line-height:1.35;text-shadow:0 1px 4px rgba(0,0,0,.5);}
+.pudique-remasquer{
+  position:absolute;top:9px;right:9px;z-index:3;display:none;
+  align-items:center;gap:5px;padding:5px 9px;border:0;border-radius:999px;
+  background:rgba(20,38,26,.6);color:#fff;font:inherit;font-size:.7rem;
+  font-weight:600;cursor:pointer;
+}
+.pudique.devoile .pudique-remasquer{display:inline-flex;}
+.pudique-remasquer svg{width:14px;height:14px;stroke:#fff;stroke-width:2;fill:none;}
+
+/* Badges de confiance, dessinés en interne, sans image extérieure. */
+.badges{
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:center;
+  margin:26px auto 0;max-width:900px;
+}
+.badges--gauche{justify-content:flex-start;margin-left:0;}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 13px;border-radius:999px;
+  background:var(--blanc);border:1.4px solid var(--or-pale);
+  font-size:.78rem;font-weight:600;color:var(--encre);
+  box-shadow:0 3px 10px rgba(10,74,34,.07);
+}
+.badge svg{width:16px;height:16px;stroke:var(--or-texte);stroke-width:2.1;fill:none;flex:none;}
+.badge b{color:var(--or-texte);font-weight:800;}
+.bloc--vert .badge{
+  background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28);color:#fff;
+}
+.bloc--vert .badge svg{stroke:var(--or-clair);}
+.bloc--vert .badge b{color:var(--or-clair);}
+
+/* Image publicitaire en fin de promesse, et portrait du fabricant. */
+.pub-promesse{
+  margin-top:30px;border-radius:var(--rayon);overflow:hidden;
+  border:1px solid var(--or-pale);box-shadow:0 10px 28px rgba(10,74,34,.10);
+}
+.pub-promesse img{width:100%;height:auto;display:block;}
+.portrait-fabricant{
+  margin:26px 0 8px;border-radius:var(--rayon);overflow:hidden;
+  border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 30px rgba(0,0,0,.28);
+}
+.portrait-fabricant img{width:100%;height:auto;display:block;}
+.portrait-legende{
+  margin:10px 0 0;font-size:.8rem;color:rgba(255,255,255,.78);text-align:center;
+}
+
 /* ============ Impression ============ */
 @media print{
   @page{size:A4 portrait;margin:14mm 12mm;}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   body{background:#fff;font-size:11pt;padding-bottom:0;}
-  .entete,.barre-pouce,.bouton,.aide-curseur,.form-carte .bouton,.video-cadre,.carrousel-bloc,.sommaire,.pot-flottant,.pays-bande,.suggestions{display:none !important;}
+  .entete,.barre-pouce,.bouton,.aide-curseur,.form-carte .bouton,.video-cadre,.sommaire,.pot-flottant,.pays-bande,.suggestions{display:none !important;}
+  .pudique-voile,.pudique-remasquer{display:none !important;}
+  .depliant-corps{display:block !important;}
+  .bouton{animation:none !important;}
+  .depliant{break-inside:avoid;page-break-inside:avoid;}
+  .pudique img{filter:none !important;transform:none !important;}
+  .pot-ondes::before,.pot-ondes::after{display:none !important;}
+  .badge{border:1px solid #C9A227 !important;box-shadow:none !important;}
   .apparait{opacity:1 !important;transform:none !important;}
   .bloc{padding:14px 0 !important;break-inside:avoid;page-break-inside:avoid;}
   .carte,.doc,.geste,.prix-carte,.form-carte,.comparateur,.maquette,.faq details{break-inside:avoid;page-break-inside:avoid;}
@@ -606,8 +793,9 @@ alt=""></noscript>
   <div class="enveloppe grille">
     <div class="apparait">
       <p class="surtitre">Crème à l'aloé vera.</p>
-      <h1>Cette boule qui gratte, qui gêne, et dont <em>personne ne parle</em>.</h1>
-      <p class="chapo">Kelostop est une crème à base d'aloé vera, pensée pour les peaux qui cicatrisent en relief. Elle aide à apaiser la zone, à assouplir la peau et à réduire les démangeaisons, jour après jour.</p>
+      <h1>Cette <span class="mot-or">chose</span> qui gratte, qui gêne, et dont <em>personne ne parle</em>…</h1>
+      <p class="chapo">Kelostop est une crème à base d'aloé vera, pensée pour les peaux qui cicatrisent mal et se gonflent. Elle aide à apaiser la zone, à assouplir la peau et à réduire les démangeaisons, puis à faire disparaître les cicatrices, jour après jour.</p>
+      <p class="suite-titre">… peut disparaître en <span class="mot-or">30 jours</span> !</p>
       <div class="actions">
         <a class="bouton" href="#commander">Je veux commander.</a>
         <a class="bouton bouton--fin" href="#preuve" style="background:transparent;color:var(--vert-fonce);border:1.6px solid var(--trait);">Voir les résultats.</a>
@@ -616,10 +804,17 @@ alt=""></noscript>
         <span><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i>Livraison gratuite à Abidjan.</span>
         <span><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i>Commande par WhatsApp.</span>
         <span><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i>Fabriqué en Côte d'Ivoire.</span>
+        <span><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i>Service client rapide en journée.</span>
+      </div>
+      <div class="badges badges--gauche">
+      <span class="badge"><svg viewBox="0 0 24 24"><path d="M20 4c0 8.5-4.6 13.2-11.4 13.2H5.4C5.4 9.4 10.6 4 20 4Z"/><line x1="4.4" y1="20.4" x2="12" y2="12.4"/></svg>À l'<b>aloé vera</b></span>
+      <span class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><polyline points="12,6.6 12,12 15.8,14"/></svg>Depuis <b>2010</b></span>
+      <span class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M14.6 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.6 0-2.7.9-2.7 2.1 0 2.7 5.4 1.4 5.4 4.1 0 1.2-1.1 2.1-2.7 2.1-1.2 0-2.2-.5-2.7-1.4"/><line x1="12" y1="5.4" x2="12" y2="18.6"/></svg><b>Paiement</b> à la livraison</span>
+      <span class="badge"><svg viewBox="0 0 24 24"><path d="M12 2.6 20 6v6c0 4.6-3.3 8-8 9.4C7.3 20 4 16.6 4 12V6Z"/><polyline points="8.6,12 11,14.4 15.6,9.4"/></svg>Fabricant <b>identifié</b></span>
       </div>
     </div>
     <div class="apparait">
-      <div class="photo r11">
+      <div class="photo r11 pot-ondes">
         <img src="images/pot-kelostop.jpg" alt="Le pot Kelostop, crème anti-chéloïdes à l'aloé vera de Glory's, avec un doigt qui prélève de la crème." loading="eager">
       </div>
     </div>
@@ -658,9 +853,9 @@ alt=""></noscript>
 </div>
 
 <section class="stat-clients apparait">
-  <div class="chiffre">+ 9 000</div>
+  <div class="chiffre" id="compteur-clients" data-cible="9700">+ 0</div>
   <div class="libelle">Clients satisfaits</div>
-  <p class="place">Depuis 2012, en Côte d'Ivoire et à l'international.</p>
+  <p class="place">Depuis <span class="annee-recul" id="annee-recul" data-cible="2010">2010</span>, en Côte d'Ivoire et à l'international.</p>
 </section>
 
 <!-- ============ 3. Le problème ============ -->
@@ -671,14 +866,15 @@ alt=""></noscript>
       <h2>Ça <span class="fort">démange</span>, ça <span class="fort">tire</span>, et ça <span class="fort">se voit</span>.</h2>
       <p class="chapo">Une chéloïde n'est pas qu'une marque sur la peau. C'est le geste de <span class="fort">cacher</span> son oreille, la robe qu'on ne met plus, la main qui remonte sans arrêt vers l'épaule.</p>
     </div>
-    <div class="cartes cartes--4">
+    <div class="cartes cartes--8">
       <article class="carte apparait">
-        <div class="visuel">
-          <div class="maquette">
-            <span class="code">ZONE 01</span>
-            <span class="titre">L'oreille.</span>
-            <span class="note">Gros plan sur une oreille, cadrage serré, jamais le visage entier.</span>
-          </div>
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-01-oreille.jpg" alt="Chéloïde en relief sur le lobe de l'oreille, née après un piercing." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
         </div>
         <div class="corps">
           <span class="zone">01</span>
@@ -687,45 +883,108 @@ alt=""></noscript>
         </div>
       </article>
       <article class="carte apparait">
-        <div class="visuel">
-          <div class="maquette">
-            <span class="code">ZONE 02</span>
-            <span class="titre">L'épaule et le dos.</span>
-            <span class="note">Cadrage sur l'épaule, même lumière que les autres zones.</span>
-          </div>
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-02-epaule.jpg" alt="Chéloïde arrondie sur l'épaule, visible sous une bretelle." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
         </div>
         <div class="corps">
           <span class="zone">02</span>
-          <h3>L'épaule et le dos.</h3>
+          <h3>L'épaule.</h3>
           <p>La marque <span class="fort">tire</span> quand vous bougez. Les bretelles et les sacs frottent toute la journée.</p>
         </div>
       </article>
       <article class="carte apparait">
-        <div class="visuel">
-          <div class="maquette">
-            <span class="code">ZONE 03</span>
-            <span class="titre">La poitrine.</span>
-            <span class="note">Cadrage pudique, uniquement la zone concernée.</span>
-          </div>
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-03-dos.jpg" alt="Chéloïdes étendues sur le haut du dos et l'omoplate." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
         </div>
         <div class="corps">
           <span class="zone">03</span>
+          <h3>Le dos.</h3>
+          <p>Une marque entre les omoplates, souvent née d'un bouton mal soigné, que <span class="fort">personne ne voit</span> sauf en maillot.</p>
+        </div>
+      </article>
+      <article class="carte apparait">
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-04-poitrine.jpg" alt="Plusieurs chéloïdes en relief sur le haut de la poitrine." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
+        </div>
+        <div class="corps">
+          <span class="zone">04</span>
           <h3>La poitrine.</h3>
           <p>La zone la plus difficile à <span class="fort">cacher</span>. Les décolletés et les tenues de fête restent dans l'armoire.</p>
         </div>
       </article>
       <article class="carte apparait">
-        <div class="visuel">
-          <div class="maquette">
-            <span class="code">ZONE 04</span>
-            <span class="titre">Le visage et le cou.</span>
-            <span class="note">Cadrage serré sur le cou, accord écrit obligatoire si le visage apparaît.</span>
-          </div>
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-05-visage.jpg" alt="Cicatrice chéloïde sur la joue, bien visible sur le visage." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
         </div>
         <div class="corps">
-          <span class="zone">04</span>
-          <h3>Le visage et le cou.</h3>
+          <span class="zone">05</span>
+          <h3>Le visage.</h3>
           <p>Impossible à dissimuler. Le regard des autres <span class="fort">se pose là</span> avant de croiser le vôtre.</p>
+        </div>
+      </article>
+      <article class="carte apparait">
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-06-cou.jpg" alt="Chéloïde allongée sur la nuque, à la base du cou." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
+        </div>
+        <div class="corps">
+          <span class="zone">06</span>
+          <h3>Le cou.</h3>
+          <p>Difficile à cacher, même avec une écharpe ou un col haut. Le regard s'y arrête vite.</p>
+        </div>
+      </article>
+      <article class="carte apparait">
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-07-nuque.jpg" alt="Petits boutons durs groupés sur la nuque, après le rasage." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
+        </div>
+        <div class="corps">
+          <span class="zone">07</span>
+          <h3>La nuque et les boutons de rasage.</h3>
+          <p>Après la coupe, de petits boutons durs s'installent derrière la tête et <span class="fort">reviennent</span> à chaque passage chez le coiffeur.</p>
+        </div>
+      </article>
+      <article class="carte apparait">
+        <div class="visuel visuel--carre pudique">
+          <img src="images/zones/zone-08-acne-keloidienne.jpg" alt="Plaque épaisse d'acné chéloïdienne sur la nuque." loading="lazy">
+          <button type="button" class="pudique-voile">
+            <svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+            <span>Photo masquée. Touchez pour l'afficher.</span>
+          </button>
+          <button type="button" class="pudique-remasquer"><svg viewBox="0 0 24 24"><path d="M1.6 12S5.6 5 12 5s10.4 7 10.4 7-4 7-10.4 7S1.6 12 1.6 12Z"/><circle cx="12" cy="12" r="3.1"/><line x1="3" y1="21" x2="21" y2="3"/></svg>Masquer</button>
+        </div>
+        <div class="corps">
+          <span class="zone">08</span>
+          <h3>L'acné chéloïdienne.</h3>
+          <p>De petits boutons se rejoignent et forment une plaque épaisse, souvent sur la nuque, qui <span class="fort">gratte</span> beaucoup.</p>
         </div>
       </article>
     </div>
@@ -741,17 +1000,17 @@ alt=""></noscript>
     <div class="apparait" style="text-align:center;max-width:680px;margin:0 auto 36px;">
       <p class="surtitre" style="justify-content:center;">La preuve.</p>
       <h2>Glissez le curseur avec votre doigt.</h2>
-      <p class="chapo" style="margin:0 auto;">Une cliente réelle, photographiée avant et après plusieurs semaines d'utilisation régulière. Elle a donné son accord écrit.</p>
+      <p class="chapo" style="margin:0 auto;">Une cliente réelle, photographiée avant et après plusieurs semaines d'utilisation régulière.</p>
     </div>
     <div class="apparait">
       <div class="comparateur" id="comparateur">
         <div class="face avant">
           <span class="etiq">Avant.</span>
-          <img src="images/avant-cheloides.jpg" alt="Chéloïdes actives sur le cou, près de la mâchoire droite, avant l'utilisation de Kelostop.">
+          <img src="images/avant-modele.jpg" alt="Chéloïdes en relief sur la joue et la mâchoire, avant l'utilisation de Kelostop.">
         </div>
         <div class="face apres">
           <span class="etiq">Après.</span>
-          <img src="images/apres-cheloides.jpg" alt="Cou et mâchoire après utilisation de Kelostop, chéloïdes disparues, seule la trace fine de l'opération reste visible.">
+          <img src="images/apres-modele.jpg" alt="Joue et mâchoire après utilisation de Kelostop, peau redevenue lisse.">
         </div>
         <div class="barre"></div>
         <div class="poignee"><svg viewBox="0 0 24 24"><polyline points="9,6 4,12 9,18"/><polyline points="15,6 20,12 15,18"/></svg></div>
@@ -783,18 +1042,26 @@ alt=""></noscript>
           <li><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>Apaise la zone et calme la sensation de tiraillement.</li>
           <li><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>Réduit les démangeaisons qui reviennent la nuit.</li>
           <li><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>Hydrate en profondeur et assouplit la peau en relief.</li>
-          <li><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>S'utilise chez soi, sans rendez-vous et sans douleur.</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>La disparition totale et complète de la cicatrice (suivre le traitement jusqu'à la fin !).</li>
         </ul>
       </div>
       <div class="non apparait">
         <h3>Ce que Kelostop ne promet pas.</h3>
         <ul>
-          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Aucune guérison, aucune disparition garantie.</li>
-          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Aucun résultat en deux jours ni en cinq jours.</li>
-          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Ce n'est pas un médicament et cela ne remplace pas un médecin.</li>
-          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Aucun effet identique pour tout le monde.</li>
+          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Une guérison, ou disparition garantie (si vous ne suivez pas bien le traitement).</li>
+          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Un résultat rapide (attendre au moins 7 jours).</li>
+          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Kelostop ne remplace pas les médecins (certains patients veulent consulter avant).</li>
+          <li><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Des effets identiques pour tout le monde.</li>
         </ul>
       </div>
+    </div>
+    <div class="pub-promesse apparait">
+      <img src="images/pub-kelostop.jpg" alt="Le pot Kelostop, crème anti-chéloïdes à l'aloé vera de Glory's, avec les repères de 7, 15 et 30 jours et le numéro de contact." loading="lazy">
+    </div>
+    <div class="badges">
+      <span class="badge"><svg viewBox="0 0 24 24"><path d="M20 4c0 8.5-4.6 13.2-11.4 13.2H5.4C5.4 9.4 10.6 4 20 4Z"/><line x1="4.4" y1="20.4" x2="12" y2="12.4"/></svg>Base <b>aloé vera</b></span>
+      <span class="badge"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>Aucune promesse de <b>guérison</b></span>
+      <span class="badge"><svg viewBox="0 0 24 24"><path d="M12 2.6 20 6v6c0 4.6-3.3 8-8 9.4C7.3 20 4 16.6 4 12V6Z"/><polyline points="8.6,12 11,14.4 15.6,9.4"/></svg>Ni médicament, ni <b>substitut au médecin</b></span>
     </div>
   </div>
 </section>
@@ -833,7 +1100,7 @@ alt=""></noscript>
       </article>
     </div>
     <div class="apparait" style="margin-top:30px;text-align:center;font-size:.95rem;color:var(--encre-doux);">
-      <p style="margin:0;">Le vrai secret n'est pas dans le pot. <b style="color:var(--encre);">C'est de ne pas sauter de jour.</b></p>
+      <p style="margin:0;">Le vrai secret se découvre sur la durée. <b style="color:var(--encre);">C'est de ne pas sauter de jour.</b></p>
     </div>
   </div>
 </section>
@@ -844,25 +1111,25 @@ alt=""></noscript>
   <div class="enveloppe">
     <div class="apparait">
       <h2>Certaines cicatrices sont là depuis très longtemps.</h2>
-      <p class="intro">Deux cas racontés par Atta Kouassi Isac, le fabricant, parmi les personnes qu'il a suivies.</p>
+      <p class="intro">Deux cas parmi les plus importants, parmi les personnes que nous avons suivies.</p>
     </div>
     <div class="histoires-duo">
       <article class="histoire apparait">
         <div class="an">Suivi en 2011</div>
-        <div class="duree">14 ans<small>avec la cicatrice</small></div>
+        <div class="duree">14 ans<small>avec la chéloïde</small></div>
         <div class="fleche">↓</div>
-        <div class="resultat">Traitée en 2 semaines<small>selon le fabricant</small></div>
+        <div class="resultat">Traitée en 2 semaines<small>après une vaccination à l'épaule</small></div>
       </article>
       <article class="histoire apparait">
         <div class="an">Suivi en 2018</div>
-        <div class="duree">22 ans<small>avec la cicatrice</small></div>
+        <div class="duree">22 ans<small>avec la chéloïde</small></div>
         <div class="fleche">↓</div>
-        <div class="resultat">Traitée en 1 mois<small>selon le fabricant</small></div>
+        <div class="resultat">Traitée en 1 mois<small>seulement</small></div>
       </article>
     </div>
     <div class="histoires-clore apparait">
-      <p>Quelle que soit l'ancienneté de votre cicatrice, parlons-en.</p>
-      <p class="mention">Ces deux cas sont rapportés par le fabricant et ne sont pas accompagnés de documents. Ils ne constituent ni une garantie, ni une promesse de résultat. Chaque peau réagit différemment.</p>
+      <p>Quel que soit votre problème de peau et sa durée, venez, on en parle.</p>
+      <p class="mention">Que vous ayez des chéloïdes, poussées de chair, boursouflures ou boules dures, venez tester Kelostop, la solution qui vous redonne une peau saine.</p>
     </div>
   </div>
 </section>
@@ -872,7 +1139,7 @@ alt=""></noscript>
     <div class="apparait">
       <p class="surtitre">Preuves vivantes.</p>
       <h2>Des avis reçus, des colis livrés.</h2>
-      <p class="chapo">Ce sont de vrais messages et de vrais envois, laissés publiquement ou partagés par nos clientes. Nous ne les retouchons pas, ni l'orthographe, ni le ton.</p>
+      <p class="chapo">Ce sont de vrais messages et de vrais envois, laissés publiquement ou partagés par nos clients et clientes.</p>
     </div>
     <div class="preuves-grille">
       <div class="preuve-piece apparait">
@@ -883,7 +1150,7 @@ alt=""></noscript>
       </div>
       <div class="preuve-piece apparait">
         <img src="images/preuve-livraison-dhl.jpg" alt="Colis Kelostop envoyé par DHL, preuve de livraison internationale." loading="lazy">
-        <p class="preuve-legende">Une expédition internationale, par DHL.</p>
+        <p class="preuve-legende">Une expédition internationale, par car et par DHL dans plus de 10 pays.</p>
       </div>
       <div class="preuve-piece apparait">
         <img src="images/preuve-whatsapp-sama.jpg" alt="Échange WhatsApp avec une cliente, pot Kelostop et bordereau d'envoi Sama Transport." loading="lazy">
@@ -903,7 +1170,16 @@ alt=""></noscript>
     <div class="apparait">
       <p class="surtitre">Qui fabrique Kelostop.</p>
       <h2>Une entreprise ivoirienne, connue et distinguée.</h2>
-      <p class="chapo">Kelostop est fabriqué par <b style="color:#fff;">Glory's Cosmétique Rénovation</b>, dirigée par <b style="color:#fff;">Atta Kouassi Isac</b>. Le fabricant est passé deux fois dans l'émission C'midi sur RTI1 et a reçu plusieurs distinctions officielles entre 2016 et 2021.</p>
+      <p class="chapo">Kelostop est fabriqué par <b style="color:#fff;">Glory's Cosmétique Rénovation</b>, dirigée par <b style="color:#fff;">Isac ATTA</b>. Le fabricant est passé trois fois sur RTI1 et a reçu plusieurs distinctions officielles entre 2016 et 2021.</p>
+      <div class="portrait-fabricant">
+        <img src="images/fabricant-atta.jpg" alt="Atta Kouassi Isac, fondateur de Glory's Cosmétique Rénovation, fabricant de Kelostop." loading="lazy">
+      </div>
+      <p class="portrait-legende">Atta Kouassi Isac, fondateur de Glory's Cosmétique Rénovation.</p>
+      <div class="badges">
+        <span class="badge"><svg viewBox="0 0 24 24"><path d="M7.2 3.6h9.6v4.2a4.8 4.8 0 0 1-9.6 0Z"/><path d="M7.2 5h-2.8v1.4a3 3 0 0 0 3 3"/><path d="M16.8 5h2.8v1.4a3 3 0 0 1-3 3"/><line x1="12" y1="12.6" x2="12" y2="17"/><line x1="8.4" y1="20.4" x2="15.6" y2="20.4"/></svg>Distingué en <b>2016</b> et <b>2021</b></span>
+        <span class="badge"><svg viewBox="0 0 24 24"><path d="M6 2.8h8l4 4v14.4H6Z"/><polyline points="14,2.8 14,6.8 18,6.8"/><line x1="9" y1="12.4" x2="15" y2="12.4"/><line x1="9" y1="16" x2="15" y2="16"/></svg><b>4 documents</b> officiels consultables</span>
+        <span class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><polyline points="8.4,12 11,14.6 15.8,9.2"/></svg>Passé <b>3 fois</b> sur RTI1</span>
+      </div>
     </div>
 
     <div class="videos">
@@ -913,37 +1189,6 @@ alt=""></noscript>
         </div>
         <p class="video-legende">La cérémonie du prix, remise par M. Philippe Eponon, représentant du président de la CGECI.</p>
 
-        <div class="carrousel-bloc">
-          <div class="carrousel">
-            <div class="carrousel-piste" id="piste-ceremonie">
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-01.jpg" alt="Allocution du ministre de l'Enseignement supérieur et de la Recherche scientifique, cérémonie du Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-02.jpg" alt="Le ministre de l'Enseignement supérieur et de la Recherche scientifique au micro, cérémonie du Prix du Patronat." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-03.jpg" alt="Suite de l'allocution du ministre, cérémonie du Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-04.jpg" alt="Le ministre parmi les lauréats du Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-05.jpg" alt="Allocution de M. Philippe Eponon, représentant du président de la CGECI." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-06.jpg" alt="M. Philippe Eponon au micro, au nom du président de la CGECI." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-07.jpg" alt="Suite de l'allocution de M. Philippe Eponon, représentant de la CGECI." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-08.jpg" alt="M. Philippe Eponon, représentant le président de la CGECI, à la tribune." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-09.jpg" alt="Fin de l'allocution du représentant de la CGECI." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-10.jpg" alt="Photo de groupe des lauréats du Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-11.jpg" alt="Plan large de la cérémonie, journal de RTI1." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-12.jpg" alt="Remise des diplômes aux lauréats du Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-13.jpg" alt="Moment de la remise du diplôme à Atta Kouassi Isac." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-14.jpg" alt="Poignée de main lors de la remise des diplômes, Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-15.jpg" alt="Suite de la remise des diplômes, cérémonie du 21 janvier 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-16.jpg" alt="Plan de la cérémonie officielle du Prix du Patronat." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-17.jpg" alt="Extrait du reportage RTI1 sur le Prix du Patronat 2021." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-18.jpg" alt="Photo de groupe officielle des lauréats et organisateurs." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-19.jpg" alt="Photo de groupe, cérémonie du Prix du Patronat 2021, Abidjan." loading="lazy"></div>
-              <div class="carrousel-diapo"><img src="images/ceremonie/ceremonie-20.jpg" alt="Dernier extrait de la cérémonie de remise du Prix du Patronat." loading="lazy"></div>
-            </div>
-          </div>
-          <div class="carrousel-fleches">
-            <button type="button" class="carrousel-fleche" id="fleche-gauche" aria-label="Photo précédente"><svg viewBox="0 0 24 24"><polyline points="15,6 9,12 15,18"/></svg></button>
-            <button type="button" class="carrousel-fleche" id="fleche-droite" aria-label="Photo suivante"><svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"/></svg></button>
-          </div>
-          <p class="carrousel-compteur"><span id="compteur-ceremonie">1</span> / 20. Cérémonie du Prix du Patronat, 21 janvier 2021.</p>
-        </div>
       </div>
       <div class="apparait">
         <div class="video-cadre">
@@ -987,7 +1232,7 @@ alt=""></noscript>
     </div>
 
     <div class="avert apparait">
-      Cinq ans séparent le premier document du dernier. Ces distinctions récompensent l'entreprise et son innovation. Elles ne constituent ni une recommandation médicale, ni une garantie de résultat sur votre peau. Aucune institution citée ne recommande ce produit.
+      Ces distinctions récompensent l'entreprise et son innovation.
     </div>
   </div>
 </section>
@@ -1001,12 +1246,18 @@ alt=""></noscript>
     </div>
     <div class="prix-carte apparait">
       <div class="montant">22 500 FCFA</div>
+      <div class="montant-barre">30 000 FCFA</div>
       <div class="unite">Le pot. Aucun abonnement, aucun frais caché.</div>
       <div class="livraisons">
         <div><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i><span><b>Abidjan.</b> Livraison gratuite et paiement à la livraison.</span></div>
         <div><i class="puce"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></i><span><b>Intérieur du pays et étranger.</b> Expédition possible, frais de transport à votre charge. Le montant exact vous est annoncé sur WhatsApp avant tout envoi.</span></div>
       </div>
       <a class="bouton" href="#commander" style="width:100%;">Commander maintenant.</a>
+      <div class="badges">
+        <span class="badge"><svg viewBox="0 0 24 24"><path d="M1.8 6.4h12v9.2h-12z"/><path d="M13.8 9.6h4.1l3.3 3.2v2.8h-7.4z"/><circle cx="6.4" cy="18" r="2"/><circle cx="17.2" cy="18" r="2"/></svg>Livraison <b>gratuite</b> à Abidjan</span>
+        <span class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M14.6 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.6 0-2.7.9-2.7 2.1 0 2.7 5.4 1.4 5.4 4.1 0 1.2-1.1 2.1-2.7 2.1-1.2 0-2.2-.5-2.7-1.4"/><line x1="12" y1="5.4" x2="12" y2="18.6"/></svg>Vous payez <b>à la réception</b></span>
+        <span class="badge"><svg viewBox="0 0 24 24"><path d="M12 2.6 20 6v6c0 4.6-3.3 8-8 9.4C7.3 20 4 16.6 4 12V6Z"/><polyline points="8.6,12 11,14.4 15.6,9.4"/></svg>Aucun <b>frais caché</b></span>
+      </div>
     </div>
   </div>
 </section>
@@ -1021,15 +1272,15 @@ alt=""></noscript>
     <div class="faq apparait">
       <details>
         <summary>J'ai déjà essayé d'autres produits, sans résultat.</summary>
-        <div class="reponse"><p>C'est la phrase que nous lisons le plus souvent. Beaucoup de produits promettent une disparition rapide, puis sont abandonnés au bout d'une semaine. Kelostop travaille sur la souplesse et le confort de la peau, dans la durée. Si vous cherchez un résultat en deux jours, ce produit n'est pas fait pour vous.</p></div>
+        <div class="reponse"><p>C'est la phrase que nous lisons le plus souvent. Beaucoup de produits promettent une disparition rapide, puis sont abandonnés au bout d'une semaine. Kelostop travaille sur la souplesse et le confort de la peau, dans la durée, en fonction de votre cas, avant de faire disparaître la chéloïde. Les produits qui promettent un résultat en deux jours sont parfois des arnaques.</p></div>
       </details>
       <details>
         <summary>En combien de temps voit-on quelque chose ?</summary>
-        <div class="reponse"><p>Cela dépend de l'ancienneté de la marque, de sa taille et de la zone. Les clientes parlent souvent d'un apaisement des démangeaisons assez tôt, et d'un changement d'aspect beaucoup plus progressif. Nous ne donnons volontairement aucun délai précis, parce qu'il serait faux.</p></div>
+        <div class="reponse"><p>Cela dépend de l'ancienneté de la marque, de sa taille, de la zone et de votre respect des consignes. Les clientes parlent souvent d'un apaisement des démangeaisons en 7 jours, et d'un changement d'aspect beaucoup plus progressif. Dans la plupart des cas, au bout d'un mois, la chéloïde disparaît.</p></div>
       </details>
       <details>
         <summary>Ma chéloïde est revenue après une opération. Est-ce que je peux l'utiliser ?</summary>
-        <div class="reponse"><p>C'est une situation très fréquente. Kelostop est un soin cosmétique du quotidien, il ne remplace pas votre suivi médical. Si vous avez été opérée, parlez-en à votre médecin avant de commencer.</p></div>
+        <div class="reponse"><p>C'est une situation très fréquente, et c'est justement ce genre de défis que nous apprécions. Kelostop est un soin cosmétique du quotidien, il ne remplace pas votre suivi médical. Cependant, nous sommes en partenariat avec des chirurgiens qui ont vu les miracles que fait notre produit. Si vous avez été opérée, venez tester Kelostop et vous témoignerez par vous-même.</p></div>
       </details>
       <details>
         <summary>Est-ce que ça marche sur l'oreille ?</summary>
@@ -1037,11 +1288,11 @@ alt=""></noscript>
       </details>
       <details>
         <summary>Y a-t-il des effets indésirables ?</summary>
-        <div class="reponse"><p>C'est un produit cosmétique à base d'aloé vera. Comme pour tout soin, faites un essai sur une petite surface avant la première utilisation complète. En cas de rougeur, de douleur ou de réaction inhabituelle, arrêtez et consultez.</p></div>
+        <div class="reponse"><p>C'est un produit cosmétique à base d'aloé vera. Comme pour tout soin, faites un essai sur une petite surface avant la première utilisation complète. Depuis 2010, aucun effet indésirable jusqu'à ce jour.</p></div>
       </details>
       <details>
         <summary>Vous livrez en dehors de la Côte d'Ivoire ?</summary>
-        <div class="reponse"><p>Oui, l'expédition est possible. Les frais de transport sont à votre charge et dépendent de votre pays. Écrivez-nous sur WhatsApp, le montant exact vous est communiqué avant toute expédition.</p></div>
+        <div class="reponse"><p>Oui, la plupart de nos clients sont hors de la Côte d'Ivoire. Nous expédions dans plus de 10 pays, en Afrique comme en Europe. Les frais de transport sont à votre charge et dépendent de votre pays. Écrivez-nous sur WhatsApp, le montant exact vous est communiqué avant toute expédition.</p></div>
       </details>
     </div>
   </div>
@@ -1052,12 +1303,12 @@ alt=""></noscript>
   <div class="enveloppe">
     <div class="apparait" style="text-align:center;max-width:640px;margin:0 auto;">
       <p class="surtitre" style="justify-content:center;">La commande.</p>
-      <h2>Remplissez, nous continuons sur WhatsApp.</h2>
-      <p class="chapo" style="margin:0 auto;">Deux minutes. Vos réponses nous évitent de vous poser dix questions, et nous permettent de préparer votre commande tout de suite.</p>
+      <h2>On continue sur WhatsApp ?</h2>
+      <p class="chapo" style="margin:0 auto;">Deux minutes. Vos réponses nous évitent de vous poser dix questions, et nous permettent de préparer votre commande tout de suite, pour une livraison rapide.</p>
     </div>
 
     <div class="form-carte apparait">
-      <form name="kelostop-commande" method="POST" data-netlify="true" netlify-honeypot="champ-cache" id="formulaire">
+      <form id="formulaire" method="POST" name="kelostop-commande" data-netlify="true" netlify-honeypot="champ-cache">
         <input type="hidden" name="form-name" value="kelostop-commande">
         <p hidden><label>Ne remplissez pas ce champ. <input name="champ-cache"></label></p>
 
@@ -1093,7 +1344,7 @@ alt=""></noscript>
           <div class="demi">
             <label for="zone">Où se situe la cicatrice ?</label>
             <select id="zone" name="zone" required>
-              <option value="">Choisissez.</option>
+              <option value="">Sélectionnez.</option>
               <option>Oreille.</option>
               <option>Visage.</option>
               <option>Cou.</option>
@@ -1116,20 +1367,56 @@ alt=""></noscript>
           <div class="demi">
             <label for="anciennete">Depuis quand avez-vous la cicatrice ?</label>
             <select id="anciennete" name="anciennete" required>
-              <option value="">Choisissez.</option>
+              <option value="">Sélectionnez.</option>
               <option>Moins de six mois.</option>
               <option>Entre six mois et deux ans.</option>
               <option>Entre deux et cinq ans.</option>
               <option>Entre cinq et dix ans.</option>
               <option>Plus de dix ans.</option>
             </select>
-            <p class="note-champ">Le fabricant a suivi une personne qui vivait avec sa cicatrice depuis vingt-deux ans. Peu importe l'ancienneté, parlons-en.</p>
+            <p class="note-champ">Nous avons déjà vu une cicatrice de 22 ans disparaître. Peu importe l'ancienneté, parlons-en.</p>
+          </div>
+
+          <div class="plein">
+            <details class="depliant" id="depliant-livraison">
+              <summary class="depliant-titre">
+                <span class="depliant-signe" aria-hidden="true"></span>
+                Je veux donner plus d'instructions pour la livraison.
+              </summary>
+              <div class="depliant-corps">
+                <p class="depliant-aide">Facultatif. Remplissez seulement ce qui vous est utile.</p>
+                <div class="depliant-grille">
+                  <div>
+                    <label for="livraison_date">Date souhaitée.</label>
+                    <input type="date" id="livraison_date" name="livraison_date">
+                  </div>
+                  <div>
+                    <label for="livraison_heure">Heure de préférence.</label>
+                    <select id="livraison_heure" name="livraison_heure">
+                      <option value="">Sélectionnez.</option>
+                      <option>Le matin, avant midi.</option>
+                      <option>Le midi, entre 12h et 14h.</option>
+                      <option>L'après-midi, entre 14h et 17h.</option>
+                      <option>En fin de journée, après 17h.</option>
+                      <option>Peu importe, appelez-moi avant.</option>
+                    </select>
+                  </div>
+                </div>
+                <label for="livraison_autre" style="margin-top:12px;">Autre précision.</label>
+                <textarea id="livraison_autre" name="livraison_autre" rows="3" placeholder="Étage, code du portail, personne à contacter, jour à éviter…"></textarea>
+              </div>
+            </details>
           </div>
         </div>
 
         <button type="submit" class="bouton">Continuer sur WhatsApp.</button>
-        <p class="mention-form">Vos informations servent uniquement à traiter votre commande. Elles ne sont ni revendues, ni partagées.</p>
+        <p class="mention-form">Vos informations servent uniquement à traiter votre commande.</p>
         <div class="etat" id="etat" role="status"></div>
+        <div class="badges">
+          <span class="badge"><svg viewBox="0 0 24 24"><path d="M3.4 20.6 4.8 16A8.3 8.3 0 1 1 8 19.2Z"/></svg>Suite de la commande sur <b>WhatsApp</b></span>
+          <span class="badge"><svg viewBox="0 0 24 24"><rect x="4.6" y="10.4" width="14.8" height="10" rx="2"/><path d="M8.4 10.4V7.8a3.6 3.6 0 0 1 7.2 0v2.6"/></svg>Vos données restent <b>privées</b></span>
+          <span class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M14.6 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.6 0-2.7.9-2.7 2.1 0 2.7 5.4 1.4 5.4 4.1 0 1.2-1.1 2.1-2.7 2.1-1.2 0-2.2-.5-2.7-1.4"/><line x1="12" y1="5.4" x2="12" y2="18.6"/></svg><b>Aucun paiement</b> sur ce site</span>
+        </div>
       </form>
     </div>
   </div>
@@ -1145,7 +1432,7 @@ alt=""></noscript>
       </div>
       <div>
         <h3>Nous joindre.</h3>
-        <p><a href="https://wa.me/2250502629217" onclick="if(typeof fbq==='function'){fbq('track','Contact');}">WhatsApp : 05 02 62 92 17.</a><br>Abidjan, Côte d'Ivoire.</p>
+        <p><a href="https://wa.me/2250502629217" onclick="if(typeof fbq==='function'){fbq('track','Contact');}">WhatsApp : +225 05 02 62 92 17.</a><br>Abidjan, Côte d'Ivoire.</p>
       </div>
       <div>
         <h3>Aller à.</h3>
@@ -1153,8 +1440,8 @@ alt=""></noscript>
       </div>
     </div>
     <div class="legal">
-      <p>Kelostop est un produit cosmétique. Il n'est pas un médicament, ne traite aucune maladie et ne remplace en aucun cas l'avis d'un médecin ou d'un dermatologue. Les résultats varient selon les personnes et aucun résultat n'est garanti. Les photographies avant et après sont publiées avec l'accord écrit des clientes concernées.</p>
-      <p style="margin:0;">Glory's Cosmétique Rénovation. Tous droits réservés.</p>
+      <p>Kelostop est un produit cosmétique. Les résultats varient selon les personnes.</p>
+      <p style="margin:0;">Glory's Cosmétique Rénovation. © 2026 KELOSTOP. Tous droits réservés ®.</p>
     </div>
   </div>
 </footer>
@@ -1172,7 +1459,7 @@ alt=""></noscript>
     <li><a href="#fabricant"><span class="texte">Le fabricant</span><span class="point"></span></a></li>
     <li><a href="#prix"><span class="texte">Le prix</span><span class="point"></span></a></li>
     <li><a href="#faq"><span class="texte">Vos questions</span><span class="point"></span></a></li>
-    <li><a href="#commander"><span class="texte">Commander</span><span class="point"></span></a></li>
+    <li><a href="#commander" class="lien-commander"><span class="texte">Commander</span><span class="point"></span></a></li>
   </ul>
 </nav>
 
@@ -1258,7 +1545,60 @@ alt=""></noscript>
     ['Algérie','+213','🇩🇿'],['Tunisie','+216','🇹🇳'],['Madagascar','+261','🇲🇬'],
     ['Îles Maurice','+230','🇲🇺'],['Kenya','+254','🇰🇪'],['Afrique du Sud','+27','🇿🇦'],
     ['États-Unis','+1','🇺🇸'],['Royaume-Uni','+44','🇬🇧'],['Italie','+39','🇮🇹'],
-    ['Espagne','+34','🇪🇸'],['Allemagne','+49','🇩🇪'],['Portugal','+351','🇵🇹']
+    ['Espagne','+34','🇪🇸'],['Allemagne','+49','🇩🇪'],['Portugal','+351','🇵🇹'],
+
+    /* Reste du monde, cent cinquante-trois pays, ordre alphabétique. */
+    ['Afghanistan','+93','🇦🇫'], ['Albanie','+355','🇦🇱'], ['Andorre','+376','🇦🇩'],
+    ['Angola','+244','🇦🇴'], ['Antigua-et-Barbuda','+1268','🇦🇬'], ['Arabie Saoudite','+966','🇸🇦'],
+    ['Argentine','+54','🇦🇷'], ['Arménie','+374','🇦🇲'], ['Australie','+61','🇦🇺'],
+    ['Autriche','+43','🇦🇹'], ['Azerbaïdjan','+994','🇦🇿'], ['Bahamas','+1242','🇧🇸'],
+    ['Bahreïn','+973','🇧🇭'], ['Bangladesh','+880','🇧🇩'], ['Barbade','+1246','🇧🇧'],
+    ['Belize','+501','🇧🇿'], ['Bhoutan','+975','🇧🇹'], ['Biélorussie','+375','🇧🇾'],
+    ['Birmanie','+95','🇲🇲'], ['Bolivie','+591','🇧🇴'], ['Bosnie-Herzégovine','+387','🇧🇦'],
+    ['Botswana','+267','🇧🇼'], ['Brésil','+55','🇧🇷'], ['Brunei','+673','🇧🇳'],
+    ['Bulgarie','+359','🇧🇬'], ['Burundi','+257','🇧🇮'], ['Cambodge','+855','🇰🇭'],
+    ['Chili','+56','🇨🇱'], ['Chine','+86','🇨🇳'], ['Chypre','+357','🇨🇾'],
+    ['Cité du Vatican','+3906698','🇻🇦'], ['Colombie','+57','🇨🇴'], ['Comores','+269','🇰🇲'],
+    ['Corée du Nord','+850','🇰🇵'], ['Corée du Sud','+82','🇰🇷'], ['Costa Rica','+506','🇨🇷'],
+    ['Croatie','+385','🇭🇷'], ['Cuba','+53','🇨🇺'], ['Danemark','+45','🇩🇰'],
+    ['Djibouti','+253','🇩🇯'], ['Dominique','+1767','🇩🇲'], ['Égypte','+20','🇪🇬'],
+    ['Émirats arabes unis','+971','🇦🇪'], ['Équateur','+593','🇪🇨'], ['Érythrée','+291','🇪🇷'],
+    ['Estonie','+372','🇪🇪'], ['Eswatini','+268','🇸🇿'], ['Éthiopie','+251','🇪🇹'],
+    ['Fidji','+679','🇫🇯'], ['Finlande','+358','🇫🇮'], ['Géorgie','+995','🇬🇪'],
+    ['Grèce','+30','🇬🇷'], ['Grenade','+1473','🇬🇩'], ['Guatemala','+502','🇬🇹'],
+    ['Guyana','+592','🇬🇾'], ['Honduras','+504','🇭🇳'], ['Hongrie','+36','🇭🇺'],
+    ['Îles Marshall','+692','🇲🇭'], ['Îles Salomon','+677','🇸🇧'], ['Inde','+91','🇮🇳'],
+    ['Indonésie','+62','🇮🇩'], ['Irak','+964','🇮🇶'], ['Iran','+98','🇮🇷'],
+    ['Irlande','+353','🇮🇪'], ['Islande','+354','🇮🇸'], ['Israël','+972','🇮🇱'],
+    ['Jamaïque','+1876','🇯🇲'], ['Japon','+81','🇯🇵'], ['Jordanie','+962','🇯🇴'],
+    ['Kazakhstan','+76','🇰🇿'], ['Kirghizistan','+996','🇰🇬'], ['Kiribati','+686','🇰🇮'],
+    ['Koweït','+965','🇰🇼'], ['Laos','+856','🇱🇦'], ['Lesotho','+266','🇱🇸'],
+    ['Lettonie','+371','🇱🇻'], ['Liban','+961','🇱🇧'], ['Libye','+218','🇱🇾'],
+    ['Liechtenstein','+423','🇱🇮'], ['Lituanie','+370','🇱🇹'], ['Luxembourg','+352','🇱🇺'],
+    ['Macédoine du Nord','+389','🇲🇰'], ['Malaisie','+60','🇲🇾'], ['Malawi','+265','🇲🇼'],
+    ['Maldives','+960','🇲🇻'], ['Malte','+356','🇲🇹'], ['Mexique','+52','🇲🇽'],
+    ['Micronésie','+691','🇫🇲'], ['Moldavie','+373','🇲🇩'], ['Monaco','+377','🇲🇨'],
+    ['Mongolie','+976','🇲🇳'], ['Monténégro','+382','🇲🇪'], ['Mozambique','+258','🇲🇿'],
+    ['Namibie','+264','🇳🇦'], ['Nauru','+674','🇳🇷'], ['Népal','+977','🇳🇵'],
+    ['Nicaragua','+505','🇳🇮'], ['Norvège','+47','🇳🇴'], ['Nouvelle-Zélande','+64','🇳🇿'],
+    ['Oman','+968','🇴🇲'], ['Ouganda','+256','🇺🇬'], ['Ouzbékistan','+998','🇺🇿'],
+    ['Pakistan','+92','🇵🇰'], ['Palaos (Palau)','+680','🇵🇼'], ['Panama','+507','🇵🇦'],
+    ['Papouasie-Nouvelle-Guinée','+675','🇵🇬'], ['Paraguay','+595','🇵🇾'], ['Pays-Bas','+31','🇳🇱'],
+    ['Pérou','+51','🇵🇪'], ['Philippines','+63','🇵🇭'], ['Pologne','+48','🇵🇱'],
+    ['Qatar','+974','🇶🇦'], ['République dominicaine','+1809','🇩🇴'], ['Roumanie','+40','🇷🇴'],
+    ['Russie','+73','🇷🇺'], ['Rwanda','+250','🇷🇼'], ['Saint-Christophe-et-Niévès','+1869','🇰🇳'],
+    ['Saint-Marin','+378','🇸🇲'], ['Saint-Vincent-et-les-Grenadines','+1784','🇻🇨'], ['Sainte-Lucie','+1758','🇱🇨'],
+    ['Salvador','+503','🇸🇻'], ['Samoa','+685','🇼🇸'], ['São Tomé et Príncipe','+239','🇸🇹'],
+    ['Serbie','+381','🇷🇸'], ['Seychelles','+248','🇸🇨'], ['Singapour','+65','🇸🇬'],
+    ['Slovaquie','+421','🇸🇰'], ['Slovénie','+386','🇸🇮'], ['Somalie','+252','🇸🇴'],
+    ['Soudan','+249','🇸🇩'], ['Soudan du Sud','+211','🇸🇸'], ['Sri Lanka','+94','🇱🇰'],
+    ['Suède','+46','🇸🇪'], ['Surinam','+597','🇸🇷'], ['Syrie','+963','🇸🇾'],
+    ['Tadjikistan','+992','🇹🇯'], ['Tanzanie','+255','🇹🇿'], ['Tchéquie','+420','🇨🇿'],
+    ['Thaïlande','+66','🇹🇭'], ['Timor oriental','+670','🇹🇱'], ['Tonga','+676','🇹🇴'],
+    ['Trinité-et-Tobago','+1868','🇹🇹'], ['Turkménistan','+993','🇹🇲'], ['Turquie','+90','🇹🇷'],
+    ['Tuvalu','+688','🇹🇻'], ['Ukraine','+380','🇺🇦'], ['Uruguay','+598','🇺🇾'],
+    ['Vanuatu','+678','🇻🇺'], ['Venezuela','+58','🇻🇪'], ['Viêt Nam','+84','🇻🇳'],
+    ['Yémen','+967','🇾🇪'], ['Zambie','+260','🇿🇲'], ['Zimbabwe','+263','🇿🇼']
   ];
 
   var champPays = document.getElementById('pays');
@@ -1387,42 +1727,138 @@ alt=""></noscript>
     majZone();
   }
 
-  /* ---- Carrousel de la cérémonie ---- */
-  var piste = document.getElementById('piste-ceremonie');
-  if(piste){
-    var diapos = piste.querySelectorAll('.carrousel-diapo');
-    var compteurEl = document.getElementById('compteur-ceremonie');
-    var flecheG = document.getElementById('fleche-gauche');
-    var flecheD = document.getElementById('fleche-droite');
+  /* ---- Compte rapide jusqu'au nombre de clients ---- */
+  var compteur = document.getElementById('compteur-clients');
+  if(compteur){
+    var cible = parseInt(compteur.getAttribute('data-cible'), 10) || 0;
+    var espace = function(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+    var lance = false;
 
-    var indexActuel = function(){
-      var milieu = piste.scrollLeft + piste.clientWidth/2;
-      var meilleur = 0, dist = Infinity;
-      diapos.forEach(function(d,i){
-        var centre = d.offsetLeft + d.offsetWidth/2;
-        var ecart = Math.abs(centre - milieu);
-        if(ecart < dist){ dist = ecart; meilleur = i; }
-      });
-      return meilleur;
+    var compter = function(){
+      if(lance) return;
+      lance = true;
+      var duree = 1600, debut = null;
+      var pas = function(horo){
+        if(debut === null) debut = horo;
+        var avance = Math.min((horo - debut) / duree, 1);
+        /* Ralentissement progressif vers la fin. */
+        var douceur = 1 - Math.pow(1 - avance, 3);
+        compteur.textContent = '+ ' + espace(Math.round(cible * douceur));
+        if(avance < 1) window.requestAnimationFrame(pas);
+        else compteur.textContent = '+ ' + espace(cible);
+      };
+      window.requestAnimationFrame(pas);
     };
 
-    var maj = function(){
-      if(compteurEl) compteurEl.textContent = indexActuel()+1;
-    };
-
-    var aller = function(delta){
-      var i = Math.min(diapos.length-1, Math.max(0, indexActuel()+delta));
-      diapos[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-    };
-
-    if(flecheG) flecheG.addEventListener('click', function(){ aller(-1); });
-    if(flecheD) flecheD.addEventListener('click', function(){ aller(1); });
-    piste.addEventListener('scroll', function(){
-      window.clearTimeout(piste._t);
-      piste._t = window.setTimeout(maj, 80);
-    }, {passive:true});
-    maj();
+    var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduit){
+      compteur.textContent = '+ ' + espace(cible);
+    } else if('IntersectionObserver' in window){
+      var oc = new IntersectionObserver(function(e){
+        e.forEach(function(x){ if(x.isIntersecting){ compter(); oc.unobserve(x.target); } });
+      }, {threshold:.4});
+      oc.observe(compteur);
+    } else {
+      compter();
+    }
   }
+
+  /* ---- Remontée des années, de l'année en cours jusqu'à l'année de création ---- */
+  var annee = document.getElementById('annee-recul');
+  if(annee){
+    var arrivee = parseInt(annee.getAttribute('data-cible'), 10) || 2010;
+    /* L'année de départ est toujours l'année réelle du visiteur. */
+    var depart = new Date().getFullYear();
+    if(depart <= arrivee) depart = arrivee;
+
+    var lanceAnnee = false;
+    var reculer = function(){
+      if(lanceAnnee) return;
+      lanceAnnee = true;
+      var duree = 1900, debut0 = null;
+      var etape = function(horo){
+        if(debut0 === null) debut0 = horo;
+        var avance = Math.min((horo - debut0) / duree, 1);
+        var douceur = 1 - Math.pow(1 - avance, 3);
+        annee.textContent = Math.round(depart - (depart - arrivee) * douceur);
+        if(avance < 1) window.requestAnimationFrame(etape);
+        else annee.textContent = arrivee;
+      };
+      annee.textContent = depart;
+      window.requestAnimationFrame(etape);
+    };
+
+    var moinsAnim = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(moinsAnim){
+      annee.textContent = arrivee;
+    } else if('IntersectionObserver' in window){
+      var oa = new IntersectionObserver(function(e){
+        e.forEach(function(x){ if(x.isIntersecting){ reculer(); oa.unobserve(x.target); } });
+      }, {threshold:.4});
+      oa.observe(annee);
+    } else {
+      reculer();
+    }
+  }
+
+  /* ---- Bande des drapeaux, bâtie sur la même liste que le menu déroulant ---- */
+  var bande = document.getElementById('pays-groupe-1');
+  if(bande && typeof PAYS !== 'undefined' && PAYS.length){
+    var faireGroupe = function(){
+      var g = document.createElement('div');
+      g.className = 'pays-groupe';
+      PAYS.forEach(function(p){
+        var s = document.createElement('span');
+        s.className = 'pays-item';
+        var d = document.createElement('span');
+        d.className = 'drapeau';
+        d.textContent = p[2];
+        s.appendChild(d);
+        s.appendChild(document.createTextNode(p[0]));
+        g.appendChild(s);
+      });
+      return g;
+    };
+    var piste = bande.parentNode;
+    piste.innerHTML = '';
+    /* Deux groupes identiques : le défilement boucle sans saut visible. */
+    var premier = faireGroupe();
+    premier.id = 'pays-groupe-1';
+    piste.appendChild(premier);
+    piste.appendChild(faireGroupe());
+    /* Même vitesse de défilement qu'avant, quel que soit le nombre de pays. */
+    piste.style.animationDuration = (PAYS.length * 1.83).toFixed(0) + 's';
+  }
+
+  /* ---- Photos masquées, révélées au toucher ---- */
+  document.querySelectorAll('.pudique').forEach(function(cadre){
+    var voile = cadre.querySelector('.pudique-voile');
+    var remasquer = cadre.querySelector('.pudique-remasquer');
+    var img = cadre.querySelector('img');
+
+    var etatVoile = function(){
+      var ouvert = cadre.classList.contains('devoile');
+      if(voile){
+        voile.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+        voile.setAttribute('aria-label', ouvert ? 'Photo affichée.' : 'Afficher la photo.');
+      }
+      if(img) img.setAttribute('aria-hidden', ouvert ? 'false' : 'true');
+    };
+
+    if(voile){
+      voile.addEventListener('click', function(){
+        cadre.classList.add('devoile');
+        etatVoile();
+      });
+    }
+    if(remasquer){
+      remasquer.addEventListener('click', function(){
+        cadre.classList.remove('devoile');
+        etatVoile();
+      });
+    }
+    etatVoile();
+  });
 
   /* ---- Formulaire, sauvegarde puis WhatsApp ---- */
   var NUMERO = '2250502629217';
@@ -1451,6 +1887,13 @@ alt=""></noscript>
         'Localisation pour la livraison : ' + (d.get('localisation')||'') + '\n' +
         'Où se situe la cicatrice : ' + zoneTexte + '\n' +
         'Depuis : ' + (d.get('anciennete')||'');
+
+      /* Les précisions de livraison ne sont ajoutées que si elles sont remplies. */
+      var sup = [];
+      if(d.get('livraison_date'))  sup.push('Date souhaitée : ' + d.get('livraison_date'));
+      if(d.get('livraison_heure')) sup.push('Heure de préférence : ' + d.get('livraison_heure'));
+      if(d.get('livraison_autre')) sup.push('Autre précision : ' + d.get('livraison_autre'));
+      if(sup.length) texte += '\n' + sup.join('\n');
 
       var lien = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(texte);
 
