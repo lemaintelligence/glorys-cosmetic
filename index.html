@@ -10,6 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+/* Windows n'affiche pas les drapeaux emoji. Cette police ne charge que ces caractères. */
+@font-face{
+  font-family:'Twemoji Country Flags';
+  unicode-range:U+1F1E6-1F1FF,U+1F3F4,U+E0062-E0063,U+E0065,U+E0067,U+E006C,U+E006E,U+E0073-E0074,U+E0077,U+E007F;
+  src:url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
+  font-display:swap;
+}
+
 /* ============================================================
    KELOSTOP — site de vente. Version 1.
    Charte : blanc, vert Glory's, or.
@@ -175,6 +183,8 @@ a{color:inherit;}
 .barre-pouce .prix{font-family:'Fraunces',serif;font-weight:700;font-size:1.02rem;white-space:nowrap;}
 .barre-pouce .prix small{display:block;font-family:'Karla',sans-serif;font-size:.7rem;font-weight:500;color:var(--encre-doux);}
 .barre-pouce .bouton{flex:1;padding:14px 18px;}
+.barre-pouce{transition:transform .3s ease,opacity .3s ease;}
+.barre-pouce.effacee{transform:translateY(110%);opacity:0;pointer-events:none;}
 @media(min-width:760px){.barre-pouce{display:none;}}
 body{padding-bottom:86px;}
 @media(min-width:760px){body{padding-bottom:0;}}
@@ -285,6 +295,10 @@ body{padding-bottom:86px;}
 .fort{color:var(--orange);font-weight:700;}
 
 /* ---- Bandeau des pays livrés ---- */
+.entete .pays-bande{margin:0;border:0;border-top:1px solid rgba(255,255,255,.14);}
+.entete .pays-bande .pays-item{font-size:.72rem;padding:3px 10px;}
+.entete .pays-bande .pays-item .drapeau{font-size:.95rem;}
+.pays-bande--mini{padding:4px 0 !important;}
 .pays-bande{
   background:var(--vert-fonce);color:#EAF3EA;padding:12px 0;overflow:hidden;
   position:relative;
@@ -298,6 +312,7 @@ body{padding-bottom:86px;}
 .pays-defile:hover{animation-play-state:paused;}
 .pays-groupe{display:flex;align-items:center;gap:26px;padding-right:26px;}
 .pays-item{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:.85rem;font-weight:500;}
+.drapeau{font-family:'Twemoji Country Flags','Apple Color Emoji','Segoe UI Emoji',system-ui,sans-serif;}
 .pays-item .drapeau{font-size:1.25rem;line-height:1;}
 @keyframes defile{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @media (prefers-reduced-motion:reduce){
@@ -319,6 +334,21 @@ body{padding-bottom:86px;}
   position:absolute;width:1px;height:1px;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;
 }
+/* Un appui sur la capsule déplie tous les libellés. */
+.sommaire.deploye{
+  border-radius:16px;padding:8px 12px;background:rgba(255,255,255,.96);
+  box-shadow:0 10px 30px rgba(10,74,34,.20);
+}
+.sommaire.deploye a{
+  display:flex;align-items:center;justify-content:flex-end;gap:9px;
+  padding:7px 2px;text-decoration:none;
+}
+.sommaire.deploye .texte{
+  position:static;width:auto;height:auto;clip:auto;overflow:visible;
+  font-size:.78rem;font-weight:600;color:var(--encre-doux);
+}
+.sommaire.deploye a.actif .texte{color:var(--or-texte);}
+.sommaire.deploye .point{width:8px;height:8px;flex:none;}
 .sommaire .point{
   display:block;width:7px;height:7px;border-radius:50%;
   background:var(--trait);border:1.5px solid var(--trait);
@@ -520,10 +550,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 .suggestions{
   position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;
   background:var(--blanc);border:1.6px solid var(--vert);border-radius:10px;
-  max-height:230px;overflow-y:auto;box-shadow:0 12px 30px rgba(10,74,34,.16);
+  max-height:300px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  box-shadow:0 12px 30px rgba(10,74,34,.16);
   display:none;
 }
 .suggestions.ouverte{display:block;}
+.suggestions .via-ville{color:var(--or-texte);font-size:.72rem;font-weight:600;}
 .suggestions li{
   list-style:none;padding:11px 14px;cursor:pointer;font-size:.94rem;
   display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--vert-voile);
@@ -560,25 +592,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 
 /* ============ Ajouts du 4 août ============ */
 
-/* Le lien « Commander » du sommaire, en or et vibrant. */
-.sommaire .lien-commander .texte{color:var(--or-texte);font-weight:800;}
-.sommaire .lien-commander .point{
-  background:var(--or);border-color:var(--or);
-  animation:vibre-commander 2.6s ease-in-out .8s infinite;
+/* Le mot « Commander » du pied de page, en or et vibrant. */
+.pied a.lien-commander{
+  display:inline-block;color:var(--or-clair) !important;font-weight:800;
+  animation:vibre-commander 2.6s ease-in-out .8s infinite;transform-origin:left center;
 }
-.sommaire .lien-commander.actif .point{animation:none;}
+.pied a.lien-commander:hover{color:#fff !important;animation-play-state:paused;}
 @keyframes vibre-commander{
-  0%,66%,100%{transform:translateX(0) scale(1);box-shadow:0 0 0 0 rgba(201,162,39,.55);}
-  70%{transform:translateX(-1.6px) scale(1.2);}
-  74%{transform:translateX(1.6px) scale(1.2);}
-  78%{transform:translateX(-1.4px) scale(1.15);}
-  82%{transform:translateX(1.4px) scale(1.15);}
-  86%{transform:translateX(0) scale(1.25);box-shadow:0 0 0 6px rgba(201,162,39,0);}
+  0%,64%,100%{transform:translateX(0) scale(1);text-shadow:0 0 0 rgba(232,199,74,0);}
+  68%{transform:translateX(-1.8px) scale(1.06);text-shadow:0 0 10px rgba(232,199,74,.85);}
+  72%{transform:translateX(1.8px) scale(1.06);}
+  76%{transform:translateX(-1.5px) scale(1.04);}
+  80%{transform:translateX(1.5px) scale(1.04);}
+  86%{transform:translateX(0) scale(1.08);text-shadow:0 0 14px rgba(232,199,74,.55);}
 }
-@media (prefers-reduced-motion:reduce){.sommaire .lien-commander .point{animation:none;}}
-@media(min-width:1180px){
-  .sommaire .lien-commander{opacity:1;}
-}
+@media (prefers-reduced-motion:reduce){.pied a.lien-commander{animation:none;}}
 
 /* Effet pop sur les boutons de commande. */
 .bouton{animation:pop-bouton 3.4s ease-in-out 1.2s infinite;transform-origin:center;}
@@ -645,24 +673,40 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 /* Le mot mis en avant dans le titre, en jaune or Kelostop. */
 .mot-or{color:var(--or-texte);font-weight:800;}
 
-/* Ondes vertes et jaunes mélangées autour du pot, à l'arrivée sur le site. */
-.pot-ondes{position:relative;isolation:isolate;}
-.pot-ondes::before,.pot-ondes::after{
-  content:"";position:absolute;inset:-6%;z-index:-1;border-radius:50%;
-  background:conic-gradient(from 0deg,
-    rgba(15,116,50,.42), rgba(201,162,39,.42), rgba(232,199,74,.34),
-    rgba(15,116,50,.42), rgba(201,162,39,.42), rgba(15,116,50,.42));
-  filter:blur(16px);
-  animation:onde-souffle 5.5s ease-in-out infinite, onde-tourne 18s linear infinite;
+/* Ondes concentriques qui jaillissent du pot, comme un caillou dans l'eau. */
+.pot-ondes{
+  position:relative;isolation:isolate;overflow:visible;
+  background:none !important;border:0 !important;box-shadow:none !important;
 }
-.pot-ondes::after{
-  inset:-14%;filter:blur(28px);opacity:.62;
-  animation:onde-souffle 5.5s ease-in-out .9s infinite reverse, onde-tourne 26s linear infinite reverse;
+.pot-ondes img{border-radius:50%;position:relative;z-index:2;}
+.pot-ondes .onde{
+  position:absolute;left:50%;top:50%;width:100%;height:100%;
+  margin-left:-50%;margin-top:-50%;border-radius:50%;
+  z-index:1;pointer-events:none;opacity:0;
+  border:2px solid transparent;
+  animation:onde-jaillit 6s cubic-bezier(.16,.62,.36,1) infinite;
 }
-@keyframes onde-souffle{0%,100%{transform:scale(.94);opacity:.55;}50%{transform:scale(1.06);opacity:.95;}}
-@keyframes onde-tourne{to{transform:rotate(360deg);}}
+.pot-ondes .onde:nth-child(1){animation-delay:0s;   border-color:rgba(15,116,50,.55);}
+.pot-ondes .onde:nth-child(2){animation-delay:1.2s; border-color:rgba(232,199,74,.62);}
+.pot-ondes .onde:nth-child(3){animation-delay:2.4s; border-color:rgba(15,116,50,.5);}
+.pot-ondes .onde:nth-child(4){animation-delay:3.6s; border-color:rgba(232,199,74,.58);}
+.pot-ondes .onde:nth-child(5){animation-delay:4.8s; border-color:rgba(15,116,50,.45);}
+@keyframes onde-jaillit{
+  0%  {transform:scale(.86);opacity:0;border-width:3px;}
+  12% {opacity:.9;}
+  100%{transform:scale(2.05);opacity:0;border-width:1px;}
+}
+/* Halo doux vert et jaune, qui respire sous les anneaux. */
+.pot-ondes::before{
+  content:"";position:absolute;inset:-10%;z-index:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,199,74,.30) 0%,rgba(15,116,50,.20) 46%,transparent 72%);
+  filter:blur(20px);
+  animation:halo-respire 5.5s ease-in-out infinite;
+}
+@keyframes halo-respire{0%,100%{transform:scale(.95);opacity:.6;}50%{transform:scale(1.1);opacity:1;}}
 @media (prefers-reduced-motion:reduce){
-  .pot-ondes::before,.pot-ondes::after{animation:none;opacity:.5;}
+  .pot-ondes .onde{animation:none;opacity:.25;}
+  .pot-ondes::before{animation:none;}
 }
 
 /* Cadre des photos de zones, carré, pour recevoir les images 1092 sur 1092. */
@@ -673,13 +717,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 .pudique{position:relative;overflow:hidden;background:var(--vert-voile);}
 .pudique img{
   transition:filter .32s ease, transform .32s ease;
-  filter:blur(22px) saturate(.85);transform:scale(1.06);
+  filter:blur(11px) saturate(.92);transform:scale(1.04);
 }
 .pudique.devoile img{filter:none;transform:none;}
 .pudique-voile{
   position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:9px;
-  background:rgba(20,38,26,.34);cursor:pointer;border:0;width:100%;
+  background:rgba(20,38,26,.10);cursor:pointer;border:0;width:100%;
   color:#fff;font:inherit;font-size:.82rem;font-weight:600;text-align:center;
   padding:14px;transition:opacity .3s ease;
 }
@@ -742,7 +786,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
   .bouton{animation:none !important;}
   .depliant{break-inside:avoid;page-break-inside:avoid;}
   .pudique img{filter:none !important;transform:none !important;}
-  .pot-ondes::before,.pot-ondes::after{display:none !important;}
+  .pot-ondes::before,.pot-ondes .onde{display:none !important;}
   .badge{border:1px solid #C9A227 !important;box-shadow:none !important;}
   .apparait{opacity:1 !important;transform:none !important;}
   .bloc{padding:14px 0 !important;break-inside:avoid;page-break-inside:avoid;}
@@ -784,8 +828,9 @@ alt=""></noscript>
       <span class="logo"><img src="images/logo-glorys-kelostop.png" alt="Logo Glory's Kelostop, crème anti-chéloïdes à l'aloé vera."></span>
       <span class="nom">Kelostop<small>Par Glory's</small></span>
     </a>
-    <a class="bouton bouton--fin" href="#commander">Commander sur WhatsApp.</a>
+    <a class="bouton bouton--fin" href="#prix">Commander sur WhatsApp.</a>
   </div>
+  <div id="accueil-bande" hidden></div>
 </header>
 
 <!-- ============ 2. Accroche ============ -->
@@ -797,7 +842,7 @@ alt=""></noscript>
       <p class="chapo">Kelostop est une crème à base d'aloé vera, pensée pour les peaux qui cicatrisent mal et se gonflent. Elle aide à apaiser la zone, à assouplir la peau et à réduire les démangeaisons, puis à faire disparaître les cicatrices, jour après jour.</p>
       <p class="suite-titre">… peut disparaître en <span class="mot-or">30 jours</span> !</p>
       <div class="actions">
-        <a class="bouton" href="#commander">Je veux commander.</a>
+        <a class="bouton" href="#prix">Je veux commander.</a>
         <a class="bouton bouton--fin" href="#preuve" style="background:transparent;color:var(--vert-fonce);border:1.6px solid var(--trait);">Voir les résultats.</a>
       </div>
       <div class="rassure">
@@ -815,7 +860,8 @@ alt=""></noscript>
     </div>
     <div class="apparait">
       <div class="photo r11 pot-ondes">
-        <img src="images/pot-kelostop.jpg" alt="Le pot Kelostop, crème anti-chéloïdes à l'aloé vera de Glory's, avec un doigt qui prélève de la crème." loading="eager">
+        <span class="onde"></span><span class="onde"></span><span class="onde"></span><span class="onde"></span><span class="onde"></span>
+        <img src="images/pot-hero.jpg" alt="Le pot Kelostop, crème anti-chéloïdes à l'aloé vera de Glory's, posé près de feuilles d'aloès." loading="eager">
       </div>
     </div>
   </div>
@@ -1000,7 +1046,7 @@ alt=""></noscript>
     <div class="apparait" style="text-align:center;max-width:680px;margin:0 auto 36px;">
       <p class="surtitre" style="justify-content:center;">La preuve.</p>
       <h2>Glissez le curseur avec votre doigt.</h2>
-      <p class="chapo" style="margin:0 auto;">Une cliente réelle, photographiée avant et après plusieurs semaines d'utilisation régulière.</p>
+      <p class="chapo" style="margin:0 auto;">Un client réel, photographié avant et après plusieurs semaines d'utilisation régulière.</p>
     </div>
     <div class="apparait">
       <div class="comparateur" id="comparateur">
@@ -1019,10 +1065,38 @@ alt=""></noscript>
       <p class="aide-curseur">Glissez de gauche à droite.</p>
 
       <div class="recit-preuve">
-        <p style="margin:0 0 .7em;">Cette cliente avait des chéloïdes sur le cou, près de la mâchoire droite. Elle s'est fait opérer pour les retirer, mais <b class="alerte">elles sont revenues après l'opération</b>.</p>
-        <p style="margin:0 0 .7em;">Elle a ensuite utilisé Kelostop. Sur la photo de droite, les chéloïdes ont disparu. La marque fine encore visible n'est pas une chéloïde : c'est la trace de la cicatrice de l'opération elle-même, celle-là même qui avait déclenché leur retour.</p>
+        <p style="margin:0 0 .7em;">Ce client avait des chéloïdes sur le cou, près de la mâchoire droite.</p>
+        <p style="margin:0 0 .7em;">Il a obtenu ce résultat après un peu plus de quatre semaines de traitement quotidien, <b class="alerte">sans sauter de jour</b>.</p>
         <p style="margin:0;font-size:.85rem;color:var(--encre-doux);">Les résultats varient d'une personne à l'autre, selon l'ancienneté de la marque, la zone et la régularité d'utilisation. Aucun résultat n'est garanti.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Les histoires longues ============ -->
+<section class="histoires" id="histoires">
+  <div class="enveloppe">
+    <div class="apparait">
+      <h2>Certaines cicatrices sont là depuis très longtemps.</h2>
+      <p class="intro">Deux cas parmi les plus importants, parmi les personnes que nous avons suivies.</p>
+    </div>
+    <div class="histoires-duo">
+      <article class="histoire apparait">
+        <div class="an">Suivi en 2011</div>
+        <div class="duree">14 ans<small>avec la chéloïde</small></div>
+        <div class="fleche">↓</div>
+        <div class="resultat">Traitée en 2 semaines<small>après une vaccination à l'épaule</small></div>
+      </article>
+      <article class="histoire apparait">
+        <div class="an">Suivi en 2018</div>
+        <div class="duree">22 ans<small>avec la chéloïde</small></div>
+        <div class="fleche">↓</div>
+        <div class="resultat">Traitée en 1 mois<small>seulement</small></div>
+      </article>
+    </div>
+    <div class="histoires-clore apparait">
+      <p>Quel que soit votre problème de peau et sa durée, venez, on en parle.</p>
+      <p class="mention">Que vous ayez des chéloïdes, poussées de chair, boursouflures ou boules dures, venez tester Kelostop, la solution qui vous redonne une peau saine.</p>
     </div>
   </div>
 </section>
@@ -1106,33 +1180,7 @@ alt=""></noscript>
 </section>
 
 <!-- ============ 7. Preuves vivantes ============ -->
-<!-- ============ Les histoires longues ============ -->
-<section class="histoires" id="histoires">
-  <div class="enveloppe">
-    <div class="apparait">
-      <h2>Certaines cicatrices sont là depuis très longtemps.</h2>
-      <p class="intro">Deux cas parmi les plus importants, parmi les personnes que nous avons suivies.</p>
-    </div>
-    <div class="histoires-duo">
-      <article class="histoire apparait">
-        <div class="an">Suivi en 2011</div>
-        <div class="duree">14 ans<small>avec la chéloïde</small></div>
-        <div class="fleche">↓</div>
-        <div class="resultat">Traitée en 2 semaines<small>après une vaccination à l'épaule</small></div>
-      </article>
-      <article class="histoire apparait">
-        <div class="an">Suivi en 2018</div>
-        <div class="duree">22 ans<small>avec la chéloïde</small></div>
-        <div class="fleche">↓</div>
-        <div class="resultat">Traitée en 1 mois<small>seulement</small></div>
-      </article>
-    </div>
-    <div class="histoires-clore apparait">
-      <p>Quel que soit votre problème de peau et sa durée, venez, on en parle.</p>
-      <p class="mention">Que vous ayez des chéloïdes, poussées de chair, boursouflures ou boules dures, venez tester Kelostop, la solution qui vous redonne une peau saine.</p>
-    </div>
-  </div>
-</section>
+
 
 <section class="bloc bloc--clair" id="preuves">
   <div class="enveloppe">
@@ -1170,11 +1218,11 @@ alt=""></noscript>
     <div class="apparait">
       <p class="surtitre">Qui fabrique Kelostop.</p>
       <h2>Une entreprise ivoirienne, connue et distinguée.</h2>
-      <p class="chapo">Kelostop est fabriqué par <b style="color:#fff;">Glory's Cosmétique Rénovation</b>, dirigée par <b style="color:#fff;">Isac ATTA</b>. Le fabricant est passé trois fois sur RTI1 et a reçu plusieurs distinctions officielles entre 2016 et 2021.</p>
+      <p class="chapo">Kelostop est fabriqué par <b style="color:#fff;">Glory's Cosmétique Rénovation</b>, dirigée par <b style="color:#fff;">Isaac ATTA</b>. Le fabricant est passé trois fois sur RTI1 et a reçu plusieurs distinctions officielles entre 2016 et 2021.</p>
       <div class="portrait-fabricant">
         <img src="images/fabricant-atta.jpg" alt="Atta Kouassi Isac, fondateur de Glory's Cosmétique Rénovation, fabricant de Kelostop." loading="lazy">
       </div>
-      <p class="portrait-legende">Atta Kouassi Isac, fondateur de Glory's Cosmétique Rénovation.</p>
+      <p class="portrait-legende"><b>Isaac ATTA</b><br>Fondateur de Glory's Cosmétique Rénovation.</p>
       <div class="badges">
         <span class="badge"><svg viewBox="0 0 24 24"><path d="M7.2 3.6h9.6v4.2a4.8 4.8 0 0 1-9.6 0Z"/><path d="M7.2 5h-2.8v1.4a3 3 0 0 0 3 3"/><path d="M16.8 5h2.8v1.4a3 3 0 0 1-3 3"/><line x1="12" y1="12.6" x2="12" y2="17"/><line x1="8.4" y1="20.4" x2="15.6" y2="20.4"/></svg>Distingué en <b>2016</b> et <b>2021</b></span>
         <span class="badge"><svg viewBox="0 0 24 24"><path d="M6 2.8h8l4 4v14.4H6Z"/><polyline points="14,2.8 14,6.8 18,6.8"/><line x1="9" y1="12.4" x2="15" y2="12.4"/><line x1="9" y1="16" x2="15" y2="16"/></svg><b>4 documents</b> officiels consultables</span>
@@ -1432,11 +1480,11 @@ alt=""></noscript>
       </div>
       <div>
         <h3>Nous joindre.</h3>
-        <p><a href="https://wa.me/2250502629217" onclick="if(typeof fbq==='function'){fbq('track','Contact');}">WhatsApp : +225 05 02 62 92 17.</a><br>Abidjan, Côte d'Ivoire.</p>
+        <p><a href="https://wa.me/2250104112915" onclick="if(typeof fbq==='function'){fbq('track','Contact');}">WhatsApp : +225 01 04 11 29 15.</a><br>Abidjan, Côte d'Ivoire.</p>
       </div>
       <div>
         <h3>Aller à.</h3>
-        <p><a href="#preuve">Les résultats.</a><br><a href="#commander">Commander.</a></p>
+        <p><a href="#preuve">Les résultats.</a><br><a href="#prix" class="lien-commander">Commander.</a></p>
       </div>
     </div>
     <div class="legal">
@@ -1459,18 +1507,18 @@ alt=""></noscript>
     <li><a href="#fabricant"><span class="texte">Le fabricant</span><span class="point"></span></a></li>
     <li><a href="#prix"><span class="texte">Le prix</span><span class="point"></span></a></li>
     <li><a href="#faq"><span class="texte">Vos questions</span><span class="point"></span></a></li>
-    <li><a href="#commander" class="lien-commander"><span class="texte">Commander</span><span class="point"></span></a></li>
+    <li><a href="#prix"><span class="texte">Commander</span><span class="point"></span></a></li>
   </ul>
 </nav>
 
 <!-- ============ Pot flottant, ordinateur ============ -->
-<a class="pot-flottant" id="pot-flottant" href="#commander" aria-label="Commander Kelostop.">
+<a class="pot-flottant" id="pot-flottant" href="#prix" aria-label="Commander Kelostop.">
   <img src="images/pot-kelostop.jpg" alt="Pot de crème Kelostop.">
 </a>
 
 <div class="barre-pouce">
   <div class="prix">22 500 FCFA<small>Livré gratuitement à Abidjan.</small></div>
-  <a class="bouton" href="#commander">Commander.</a>
+  <a class="bouton" href="#prix">Commander.</a>
 </div>
 
 <script>
@@ -1528,6 +1576,25 @@ alt=""></noscript>
     };
     window.addEventListener('scroll', majPot, {passive:true});
     majPot();
+  }
+
+  /* ---- La barre du bas s'efface dès que le prix ou le formulaire est à l'écran ---- */
+  var barre = document.querySelector('.barre-pouce');
+  var zonesCommande = ['#prix', '#commander'].map(function(s){ return document.querySelector(s); })
+                                             .filter(Boolean);
+  if(barre && zonesCommande.length && 'IntersectionObserver' in window){
+    var vues = new WeakSet();
+    var majBarre = function(){
+      var dedans = zonesCommande.some(function(z){ return vues.has(z); });
+      barre.classList.toggle('effacee', dedans);
+    };
+    var ob = new IntersectionObserver(function(e){
+      e.forEach(function(x){
+        if(x.isIntersecting) vues.add(x.target); else vues.delete(x.target);
+      });
+      majBarre();
+    }, {threshold:.15});
+    zonesCommande.forEach(function(z){ ob.observe(z); });
   }
 
   /* ---- Champ pays, suggestions et indicatif ---- */
@@ -1603,6 +1670,9 @@ alt=""></noscript>
 
   var champPays = document.getElementById('pays');
   var champInd = document.getElementById('indicatif');
+  /* Villes principales par pays, pour retrouver son pays en tapant sa ville. */
+  var VILLES = [['Afghanistan','Herāt|Kabul|Kandahār|Mazār-e Sharīf'],['Afrique du Sud','Bloemfontein|Cape Town|Durban|Johannesburg|Pretoria'],['Albanie','Durrës|Elbasan|Tirana|Vlorë'],['Algérie','Algiers|Annaba|Bab Ezzouar|Batna|Biskra|Blida|Constantine|Djelfa|El Oued|Oran|Sidi Bel Abbes|Skikda|Sétif|Tébessa'],['Allemagne','Berlin|Hamburg|Köln|Munich'],['Andorre','Andorra la Vella|les Escaldes'],['Angola','Kikolo|Luanda|Mulenvos|Viana'],['Antigua-et-Barbuda','Saint John\u2019s|Saint John’s'],['Arabie Saoudite','Jeddah|Madinah|Makkah|Riyadh'],['Argentine','Buenos Aires|Córdoba|Mar del Plata|Rosario'],['Arménie','Malatia-Sebastia|Nor Nork|Shengavit|Yerevan'],['Australie','Brisbane|Canberra|Melbourne|Perth|Sydney'],['Autriche','Favoriten|Graz|Linz|Vienna'],['Azerbaïdjan','Baku|Ganja|Khirdalan|Sumgayit'],['Bahamas','Freeport|Killarney|Lucaya|Nassau'],['Bahreïn','Al Muharraq|Ar Rifā‘|Madīnat Ḩamad|Manama'],['Bangladesh','Chattogram|Dhaka|Gazipur|Khulna'],['Barbade','Bridgetown'],['Belgique','Anderlecht|Antwerp|Brugge|Brussels|Charleroi|Gent|Ixelles|Leuven|Liège|Molenbeek-Saint-Jean|Mons|Namur|Schaerbeek|Uccle'],['Belize','Belize City|Belmopan|Orange Walk|San Ignacio|San Pedro'],['Bhoutan','Phuntsholing|Punākha|Thimphu|Tsirang'],['Birmanie','Hlaingthaya|Mandalay|Nay Pyi Taw|Naypyidaw|Yangon'],['Biélorussie','Homyel\u2019|Hrodna|Minsk|Vitebsk'],['Bolivie','Cochabamba|La Paz|Santa Cruz de la Sierra|Sucre'],['Bosnie-Herzégovine','Banja Luka|Sarajevo|Tuzla|Zenica'],['Botswana','Francistown|Gaborone|Maun|Mogoditshane'],['Brunei','Bandar Seri Begawan|Kuala Belait|Mentiri|Sengkurong'],['Brésil','Belo Horizonte|Brasília|Rio de Janeiro|Salvador|São Paulo'],['Bulgarie','Burgas|Plovdiv|Sofia|Varna'],['Burkina Faso','Banfora|Bobo-Dioulasso|Djibo|Dédougou|Fada N\u2019gourma|Houndé|Kaya|Koudougou|Nioko I|Ouagadougou|Ouahigouya|Pouytenga|Saaba|Tenkodogo'],['Burundi','Bujumbura|Gitega|Mpanda|Ngozi'],['Bénin','Abomey|Abomey-Calavi|Bohicon|Cotonou|Djougou|Ekpé|Godomè|Kandi|Kérou|Malanville|Natitingou|Nikki|Parakou|Porto-Novo'],['Cambodge','Battambang|Phnom Penh|Siem Reap|Takeo'],['Cameroun','Bafoussam|Bamenda|Bertoua|Buea|Douala|Foumban|Kousséri|Kumba|Kumbo|Limbe|Maroua|Ngaoundéré|Nkongsamba|Yaoundé'],['Canada','Brampton|Calgary|Edmonton|Halifax|Hamilton|Laval|Mississauga|Montréal|Ottawa|Québec|Surrey|Toronto|Vancouver|Winnipeg'],['Cap-Vert','Assomada|Espargos|Mindelo|Praia'],['Centrafrique','Bambari|Bangassou|Bangui|Berbérati|Bimbo|Bocaranga|Bossangoa|Bouar|Bria|Bégoua|Carnot|Kaga-Bandoro|Kouango|Paoua'],['Chili','Antofagasta|Maipú|Puente Alto|Santiago'],['Chine','Beijing|Guangzhou|Shanghai|Shenzhen'],['Chypre','Larnaca|Limassol|Nicosia|Stróvolos'],['Cité du Vatican','Vatican City'],['Colombie','Barranquilla|Bogotá|Cali|Medellín'],['Comores','Fomboni|Moroni|Moutsamoudou'],['Congo','Bouansa|Brazzaville|Dolisie|Gamboma|Impfondo|Kayes|Loandjili|Loutété|Mossaka|Nkayi|Ouesso|Owando|Pointe-Noire|Sibiti'],['Corée du Nord','Hamhŭng|Namp’o|Pyongyang|Sunch’ŏn'],['Corée du Sud','Busan|Daegu|Incheon|Seoul'],['Costa Rica','Alajuela|Limón|San Francisco|San José'],['Croatie','Osijek|Rijeka|Split|Zagreb'],['Cuba','Camagüey|Havana|Holguín|Santiago de Cuba'],['Côte d’Ivoire','Abidjan|Abobo|Bondoukou|Bouaké|Dabou|Daloa|Gagnoa|Korhogo|Koumassi|Man|Marcory|San-Pédro|Sinfra|Yamoussoukro'],['Danemark','Aalborg|Copenhagen|Odense|Århus'],['Djibouti','Ali Sabih|Balbala|Dikhil|Djibouti'],['Dominique','Roseau'],['Espagne','Barcelona|Madrid|Valencia|Zaragoza'],['Estonie','Lasnamäe|Mustamäe|Tallinn|Tartu'],['Eswatini','Lobamba|Manzini|Mbabane'],['Fidji','Lautoka|Nadi|Nasinu|Suva'],['Finlande','Espoo|Helsinki|Tampere|Vantaa'],['France','Bordeaux|Lille|Lyon|Marne La Vallée|Marseille|Montpellier|Nantes|Nice|Paris|Paris 15 Vaugirard|Reims|Rennes|Strasbourg|Toulouse'],['Gabon','Akanda|Bitam|Franceville|Koulamoutou|Lambaréné|Libreville|Moanda|Mouila|Ntoum|Owendo|Oyam|Oyem|Port-Gentil|Tchibanga'],['Gambie','Bakau|Bakau New Town|Banjul|Brikama|Bununka Kunda|Busumbala|Faji Kunda|Farafenni|Lamin|Nema Kunku|Serekunda|Sukuta|Talinding|Welingara'],['Ghana','Accra|Ashaiman|Atsiaman|Cape Coast|Ho|Koforidua|Kumasi|Obuase|Sekondi|Sekondi-Takoradi|Takoradi|Tamale|Tema|Teshi Old Town'],['Grenade','Saint George\u2019s|St. George\u2019s'],['Grèce','Athens|Piraeus|Pátra|Thessaloníki'],['Guatemala','Cobán|Guatemala City|Mixco|Villa Nueva'],['Guinée','Camayenne|Conakry|Dixinn|Dubréka|Gueckedou|Kamsar|Kankan|Kindia|Kissidougou|Labé|Mamou|Manéah|Nzérékoré|Siguiri'],['Guinée équatoriale','Bata|Ciudad de la Paz|Ebebiyin|Malabo'],['Guinée-Bissau','Bafatá|Bairro Militar|Belem|Bissau|Contumo|Gabú|Luanda|Missira|Plaque|Quelele|Reino de Antula|Reino de Bandim|Sintra-Nema|Xitole'],['Guyana','Georgetown|Linden|New Amsterdam'],['Géorgie','Batumi|Kutaisi|Rustavi|Tbilisi'],['Haïti','Arcahaie|Cap-Haïtien|Carrefour|Cité Soleil|Croix-des-Bouquets|Delmas|Dessalines|Jacmel|Les Cayes|Léogâne|Port-au-Prince|Port-de-Paix|Pétionville|Saint-Marc'],['Honduras','Danlí|La Ceiba|San Pedro Sula|Tegucigalpa'],['Hongrie','Buda|Budapest|Debrecen|Pest'],['Inde','Bengaluru|Delhi|Hyderabad|Mumbai|New Delhi'],['Indonésie','Bandung|Bekasi|Jakarta|Surabaya'],['Irak','Al Başrah al Qadīmah|Al Mawşil al Jadīdah|Baghdad|Mosul'],['Iran','Isfahan|Karaj|Mashhad|Tehran'],['Irlande','Cork|Dublin|Limerick|South Dublin'],['Islande','Hafnarfjörður|Kópavogur|Reykjanesbær|Reykjavik|Reykjavík'],['Israël','Haifa|Jerusalem|Tel Aviv|West Jerusalem'],['Italie','Milan|Naples|Rome|Turin'],['Jamaïque','Kingston|New Kingston|Portmore|Spanish Town'],['Japon','Nagoya|Osaka|Tokyo|Yokohama'],['Jordanie','Amman|Irbid|Russeifa|Zarqa'],['Kazakhstan','Aktobe|Almaty|Astana|Shymkent'],['Kenya','Kakamega|Mombasa|Nairobi|Nakuru'],['Kirghizistan','Bishkek|Karakol|Manas|Osh'],['Kiribati','South Tarawa|Tarawa'],['Koweït','Al Aḩmadī|As Sālimīyah|Kuwait City|Şabāḩ as Sālim|Ḩawallī'],['Laos','Pakse|Savannakhet|Thakhèk|Vientiane'],['Lesotho','Mafeteng|Maputsoe|Maseru|Mohale\u2019s Hoek'],['Lettonie','Daugavpils|Jelgava|Liepāja|Riga'],['Liban','Beirut|Ra’s Bayrūt|Sidon|Tripoli'],['Liberia','Buchanan|Foya Kamara|Ganta|Gbarnga|Harbel|Harper|Kakata|Monrovia|New Yekepa|Pleebo City|Saclepea|Tubmanburg|Voinjama|Zwedru'],['Libye','Benghazi|Misratah|Tripoli|Zliten'],['Liechtenstein','Vaduz'],['Lituanie','Kaunas|Klaipėda|Vilnius|Šiauliai'],['Luxembourg','Dudelange|Esch-sur-Alzette|Luxembourg'],['Macédoine du Nord','Bitola|Kumanovo|Prilep|Skopje'],['Madagascar','Antananarivo|Antsirabe|Mahajanga|Toamasina'],['Malaisie','Johor Bahru|Kampung Baru Subang|Kuala Lumpur|Petaling Jaya'],['Malawi','Blantyre|Lilongwe|Mzuzu|Zomba'],['Maldives','Male|Malé'],['Mali','Bamako|Bougouni|Dialakorodji|Gao|Kalaban Koro|Kati|Kayes|Kita|Koutiala|Mopti|San|Sikasso|Ségou|Timbuktu'],['Malte','Birkirkara|Mosta|San Pawl il-Baħar|Sliema|Valletta'],['Maroc','Agadir|Al Hoceïma|Casablanca|Fes|Kenitra|Marrakesh|Meknes|Oujda|Rabat|Safi|Salé|Tangier|Temara|Tétouan'],['Mauritanie','Atar|Ayoun El Atrous|Bougadoum|Dar Naim|Kaédi|Kiffa|Ksar|Mbera|Nouadhibou|Nouakchott|Néma|Sélibaby|Tevragh Zeina|Zouérat'],['Mexique','Iztapalapa|Mexico City|Puebla|Tijuana'],['Micronésie','Palikir'],['Moldavie','Bender|Bălţi|Chisinau|Chișinău|Tiraspol'],['Monaco','Monaco|Monte-Carlo'],['Mongolie','Choibalsan|Darhan|Erdenet|Ulan Bator'],['Monténégro','Herceg Novi|Nikšić|Pljevlja|Podgorica'],['Mozambique','Beira|Maputo|Matola|Nampula'],['Namibie','Rundu|Swakopmund|Walvis Bay|Windhoek'],['Nauru','Yaren'],['Nicaragua','Chinandega|León|Managua|Masaya'],['Niger','Agadez|Alaghsas|Arlit|Birni N Konni|Diffa|Dogondoutchi|Dosso|Gaya|Maradi|Méhana|Niamey|Tahoua|Tessaoua|Zinder'],['Nigeria','Aba|Abuja|Benin City|Ibadan|Ilorin|Jos|Kaduna|Kano|Lagos|Maiduguri|Onitsha|Port Harcourt|Sokoto|Zaria'],['Norvège','Bergen|Oslo|Stavanger|Trondheim'],['Nouvelle-Zélande','Auckland|Christchurch|Manukau City|Wellington'],['Népal','Bharatpur|Kathmandu|Pokhara|Pātan'],['Oman','Bawshar|Muscat|Seeb|‘Ibrī'],['Ouganda','Bunamwaya|Kampala|Kira|Nansana'],['Ouzbékistan','Andijon|Namangan|Samarkand|Tashkent'],['Pakistan','Faisalabad|Islamabad|Karachi|Lahore|Peshawar'],['Palaos (Palau)','Ngerulmud'],['Panama','David|Juan Díaz|Panama City|San Miguelito'],['Papouasie-Nouvelle-Guinée','Arawa|Lae|Mount Hagen|Port Moresby'],['Paraguay','Asunción|Capiatá|Ciudad del Este|San Lorenzo'],['Pays-Bas','Amsterdam|Rotterdam|The Hague|Utrecht'],['Philippines','Caloocan|Davao|Manila|Quezon City'],['Pologne','Kraków|Warsaw|Wrocław|Łódź'],['Portugal','Amadora|Braga|Lisbon|Porto'],['Pérou','Arequipa|Callao|Lima|Trujillo'],['Qatar','Al Maţār al ‘Atīq|Ar Rayyān|Doha|Lusail'],['RD Congo','Bukavu|Goma|Kananga|Kikwit|Kinshasa|Kisangani|Kolwezi|Likasi|Lubumbashi|Masina|Matadi|Mbandaka|Mbuji-Mayi|Tshikapa'],['Roumanie','Bucharest|Iaşi|Sector 3|Sector 6'],['Royaume-Uni','Birmingham|Glasgow|London|Manchester'],['Russie','Moscow|Novosibirsk|Saint Petersburg|Yekaterinburg'],['Rwanda','Gisenyi|Kigali|Musanze|Nyagatare'],['République dominicaine','Santiago de los Caballeros|Santo Domingo|Santo Domingo Este|Santo Domingo Oeste'],['Saint-Christophe-et-Niévès','Basseterre'],['Saint-Marin','City of San Marino|San Marino'],['Saint-Vincent-et-les-Grenadines','Calliaqua|Kingstown'],['Sainte-Lucie','Castries|Gros Islet'],['Salvador','San Miguel|San Salvador|Santa Ana|Soyapango'],['Samoa','Apia'],['Serbie','Belgrade|Niš|Novi Sad|Zemun'],['Seychelles','Victoria'],['Sierra Leone','Bo|Bumpe|Freetown|Goderich|Kabala|Kenema|Koidu|Lunsar|Makeni|Mile 91|Njala|Port Loko|Segbwema|Waterloo'],['Singapour','Bedok New Town|Sengkang New Town|Singapore|Ulu Bedok'],['Slovaquie','Bratislava|Košice|Nitra|Petržalka'],['Slovénie','Celje|Kranj|Ljubljana|Maribor'],['Somalie','Berbera|Borama|Hargeysa|Mogadishu'],['Soudan','Khartoum|Khartoum North|Nyala|Omdurman'],['Soudan du Sud','Juba|Malakal|Winejok|Yei'],['Sri Lanka','Colombo|Dehiwala-Mount Lavinia|Jaffna|Maharagama'],['Suisse','Basel|Bern|Biel/Bienne|Geneva|Lausanne|Lugano|Luzern|Sankt Gallen|Thun|Winterthur|Zürich|Zürich (Kreis 11)|Zürich (Kreis 3)|Zürich (Kreis 9)'],['Surinam','Blauwgrond|Latour|Paramaribo|Pontbuiten'],['Suède','Gothenburg|Malmö|Stockholm|Uppsala'],['Syrie','Aleppo|Damascus|Homs|Latakia'],['São Tomé et Príncipe','São Tomé'],['Sénégal','Dakar|Diourbel|Guédiawaye|Kaolack|Mbour|Pikine|Rufisque|Rufisque est|Saint-Louis|Tambacounda|Thiès|Thiès Nones|Touba|Ziguinchor'],['Tadjikistan','Dushanbe|Isfara|Istaravshan|Kŭlob'],['Tanzanie','Dar es Salaam|Dodoma|Mwanza|Zanzibar'],['Tchad','Abéché|Am Timan|Bol|Bongor|Doba|Goz Beida|Kelo|Koumra|Mao|Mongo|Moundou|N\u2019Djamena|Pala|Sarh'],['Tchéquie','Brno|Ostrava|Pilsen|Prague'],['Thaïlande','Bangkok|Chon Buri|Mueang Nonthaburi|Samut Prakan'],['Timor oriental','Dili|Likisá|Maliana|Suai'],['Togo','Anié|Aného|Atakpamé|Bassar|Dapaong|Kara|Kpalimé|Lomé|Mango|Notsé|Sinkassé|Sokodé|Tchamba|Tsévié'],['Tonga','Nuku\u2019alofa|Nuku‘alofa'],['Trinité-et-Tobago','Chaguanas|Mon Repos|Port of Spain|San Fernando'],['Tunisie','Aryanah|Bizerte|El Mourouj|Gabès|Gafsa|Hammamet|Kairouan|Sakiet ed Daier|Sakiet ez Zit|Sfax|Sousse|Sukrah|Sīdī Ḥusayn|Tunis'],['Turkménistan','Ashgabat|Daşoguz|Mary|Türkmenabat'],['Turquie','Ankara|Bursa|Istanbul|İzmir'],['Tuvalu','Funafuti'],['Ukraine','Dnipro|Kharkiv|Kyiv|Odesa'],['Uruguay','Maldonado|Montevideo|Rivera|Salto'],['Vanuatu','Port Vila|Port-Vila'],['Venezuela','Barquisimeto|Caracas|Maracaibo|Valencia'],['Viêt Nam','Cần Thơ|Haiphong|Hanoi|Ho Chi Minh City'],['Yémen','Aden|Ibb|Sana\u2019a|Sanaa|Taiz'],['Zambie','Chipata|Kitwe|Lusaka|Ndola'],['Zimbabwe','Bulawayo|Chitungwiza|Harare|Mutare'],['Égypte','Alexandria|Cairo|Giza|Shubrā al Khaymah'],['Émirats arabes unis','Abu Dhabi|Al Ain City|Dubai|Sharjah'],['Équateur','Cuenca|Guayaquil|Quito|Santo Domingo de los Colorados'],['Érythrée','Asmara|Himora|Keren|Massawa'],['États-Unis','Brooklyn|Chicago|Los Angeles|New York City|Washington D.C.'],['Éthiopie','Addis Ababa|Gonder|Jijiga|Mek\u2019ele'],['Îles Marshall','Dalap-Uliga-Dorrit|Majuro'],['Îles Maurice','Beau Bassin-Rose Hill|Curepipe|Port Louis|Vacoas'],['Îles Salomon','Honiara|Nggosi|Panatina|Tandai']];
+
   var boite = document.getElementById('liste-pays');
 
   if(champPays && champInd && boite){
@@ -1634,19 +1704,44 @@ alt=""></noscript>
       return d[m][n];
     };
 
+    /* Pour chaque pays, la ville qui correspond le mieux à la saisie. */
+    var villeTrouvee = {};
+    var chercheVille = function(s){
+      villeTrouvee = {};
+      if(s.length < 2) return;
+      VILLES.forEach(function(entree){
+        var liste = entree[1].split('|');
+        for(var i=0;i<liste.length;i++){
+          var v = simplifie(liste[i]);
+          if(v.indexOf(s) === 0){ villeTrouvee[entree[0]] = liste[i]; return; }
+        }
+        if(s.length >= 4){
+          for(var j=0;j<liste.length;j++){
+            if(simplifie(liste[j]).indexOf(s) > 0){ villeTrouvee[entree[0]] = liste[j]; return; }
+          }
+        }
+      });
+    };
+
     var chercher = function(saisie){
       var s = simplifie(saisie);
-      if(!s) return PAYS.slice(0,8);
+      /* Champ vide : on montre la liste complète, le visiteur doit voir que son pays y est. */
+      if(!s) { villeTrouvee = {}; return PAYS.slice(); }
+      chercheVille(s);
       var notes = PAYS.map(function(p){
         var nom = simplifie(p[0]);
         var note;
         if(nom.indexOf(s) === 0) note = 0;
         else if(nom.indexOf(s) > 0) note = 1;
+        else if(villeTrouvee[p[0]]) note = simplifie(villeTrouvee[p[0]]).indexOf(s) === 0 ? 0.5 : 1.5;
         else note = 2 + distance(s, nom.slice(0, Math.max(s.length,1)));
         return {pays:p, note:note};
       });
       notes.sort(function(a,b){ return a.note - b.note; });
-      return notes.filter(function(x){ return x.note <= 4; }).slice(0,8).map(function(x){ return x.pays; });
+      var bons = notes.filter(function(x){ return x.note <= 4; });
+      /* Aucune correspondance : plutôt que rien, on remontre tout. */
+      if(!bons.length) return PAYS.slice();
+      return bons.slice(0,40).map(function(x){ return x.pays; });
     };
 
     var dessiner = function(resultats){
@@ -1657,7 +1752,8 @@ alt=""></noscript>
       resultats.forEach(function(p,i){
         var li = document.createElement('li');
         li.setAttribute('role','option');
-        li.innerHTML = '<span>'+p[2]+'</span><span>'+p[0]+'</span><span class="ind">'+p[1]+'</span>';
+        var via = villeTrouvee[p[0]] ? ' <small class="via-ville">via '+villeTrouvee[p[0]]+'</small>' : '';
+        li.innerHTML = '<span class="drapeau">'+p[2]+'</span><span>'+p[0]+via+'</span><span class="ind">'+p[1]+'</span>';
         li.addEventListener('mousedown', function(ev){
           ev.preventDefault();
           choisir(p);
@@ -1755,7 +1851,10 @@ alt=""></noscript>
       compteur.textContent = '+ ' + espace(cible);
     } else if('IntersectionObserver' in window){
       var oc = new IntersectionObserver(function(e){
-        e.forEach(function(x){ if(x.isIntersecting){ compter(); oc.unobserve(x.target); } });
+        e.forEach(function(x){
+          /* On rejoue à chaque fois que le chiffre revient à l'écran. */
+          if(x.isIntersecting){ compter(); } else { lance = false; }
+        });
       }, {threshold:.4});
       oc.observe(compteur);
     } else {
@@ -1793,7 +1892,9 @@ alt=""></noscript>
       annee.textContent = arrivee;
     } else if('IntersectionObserver' in window){
       var oa = new IntersectionObserver(function(e){
-        e.forEach(function(x){ if(x.isIntersecting){ reculer(); oa.unobserve(x.target); } });
+        e.forEach(function(x){
+          if(x.isIntersecting){ reculer(); } else { lanceAnnee = false; }
+        });
       }, {threshold:.4});
       oa.observe(annee);
     } else {
@@ -1830,6 +1931,60 @@ alt=""></noscript>
     piste.style.animationDuration = (PAYS.length * 1.83).toFixed(0) + 's';
   }
 
+  /* ---- La bande des drapeaux se greffe à l'en-tête dès qu'on la dépasse ---- */
+  var bandePays = document.querySelector('.pays-bande');
+  var accueil = document.getElementById('accueil-bande');
+  if(bandePays && accueil){
+    var placeOrigine = document.createElement('div');
+    bandePays.parentNode.insertBefore(placeOrigine, bandePays);
+    var greffee = false;
+
+    var majGreffe = function(){
+      var bas = placeOrigine.getBoundingClientRect().bottom;
+      /* On ne touche jamais à l'animation : on ne fait que déplacer le bloc. */
+      if(bas < 0 && !greffee){
+        accueil.hidden = false;
+        accueil.appendChild(bandePays);
+        bandePays.classList.add('pays-bande--mini');
+        greffee = true;
+      } else if(bas >= 0 && greffee){
+        placeOrigine.parentNode.insertBefore(bandePays, placeOrigine.nextSibling);
+        bandePays.classList.remove('pays-bande--mini');
+        accueil.hidden = true;
+        greffee = false;
+      }
+    };
+    window.addEventListener('scroll', majGreffe, {passive:true});
+    majGreffe();
+  }
+
+  /* ---- Sur téléphone, un appui déplie le sommaire et montre tous les libellés ---- */
+  var som = document.querySelector('.sommaire');
+  if(som){
+    var surTelephone = function(){ return window.matchMedia('(max-width:1179px)').matches; };
+    var replier = function(){ som.classList.remove('deploye'); };
+
+    som.addEventListener('click', function(ev){
+      if(!surTelephone()) return;
+      var lien = ev.target.closest('a');
+      if(!som.classList.contains('deploye')){
+        /* Premier appui : on déplie, sans encore naviguer. */
+        ev.preventDefault();
+        som.classList.add('deploye');
+        return;
+      }
+      /* Sommaire déjà déplié : l'appui sur un lien navigue, puis on referme. */
+      if(lien) setTimeout(replier, 420);
+    });
+
+    document.addEventListener('click', function(ev){
+      if(surTelephone() && !som.contains(ev.target)) replier();
+    });
+    window.addEventListener('scroll', function(){
+      if(surTelephone() && som.classList.contains('deploye')) replier();
+    }, {passive:true});
+  }
+
   /* ---- Photos masquées, révélées au toucher ---- */
   document.querySelectorAll('.pudique').forEach(function(cadre){
     var voile = cadre.querySelector('.pudique-voile');
@@ -1861,7 +2016,7 @@ alt=""></noscript>
   });
 
   /* ---- Formulaire, sauvegarde puis WhatsApp ---- */
-  var NUMERO = '2250502629217';
+  var NUMERO = '2250104112915';
   var form = document.getElementById('formulaire');
   var etat = document.getElementById('etat');
 
