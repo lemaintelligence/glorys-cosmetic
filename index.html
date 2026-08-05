@@ -615,6 +615,26 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 }
 @media (prefers-reduced-motion:reduce){.pied a.lien-commander{animation:none;}}
 
+/* Petit bouton de retour en haut, présent sur téléphone comme sur ordinateur. */
+.haut-rapide{
+  position:fixed;right:8px;bottom:100px;z-index:65;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--vert-fonce);border:1.5px solid var(--or);
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .28s ease,transform .28s ease,background .2s ease;
+  box-shadow:0 6px 16px rgba(10,74,34,.28);
+}
+.haut-rapide.visible{opacity:.92;transform:none;pointer-events:auto;}
+.haut-rapide:hover{background:var(--or-texte);opacity:1;}
+.haut-rapide svg{width:16px;height:16px;stroke:var(--or-clair);stroke-width:2.6;fill:none;}
+@media(min-width:760px){.haut-rapide{bottom:22px;right:22px;width:38px;height:38px;}}
+@media(min-width:1180px){.haut-rapide{right:64px;}}
+
+/* Les images du site ne se laissent ni glisser ni sélectionner. */
+img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;pointer-events:none;}
+.comparateur img,.pudique img{pointer-events:none;}
+
 /* Effet pop sur les boutons de commande. */
 .bouton{animation:pop-bouton 3.4s ease-in-out 1.2s infinite;transform-origin:center;}
 .bouton--fin{animation:none;}
@@ -679,6 +699,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--vert);background:var(
 
 /* Le mot mis en avant dans le titre, en jaune or Kelostop. */
 .mot-or{color:var(--or-texte);font-weight:800;}
+.mot-vert{color:var(--vert);font-weight:800;}
+.lien-vert{color:var(--vert);font-weight:700;text-decoration:underline;text-underline-offset:2px;}
+.lien-vert:hover{color:var(--or-texte);}
 
 /* Ondes concentriques qui jaillissent du pot, comme un caillou dans l'eau.
    Tout est contenu dans le cadre : plus aucun débordement latéral possible. */
@@ -876,9 +899,9 @@ alt=""></noscript>
   <div class="enveloppe grille">
     <div class="apparait">
       <p class="surtitre">Crème à l'aloé vera.</p>
-      <h1>Cette <span class="mot-or">chose</span> qui gratte, qui gêne, et dont <em>personne ne parle</em>…</h1>
+      <h1>Cette <span class="mot-or">chose</span> qui gratte, qui gêne, et dont <span class="mot-or">personne ne parle</span>…</h1>
       <p class="chapo">Kelostop est une crème à base d'aloé vera, pensée pour les peaux qui cicatrisent mal et se gonflent. Elle aide à apaiser la zone, à assouplir la peau et à réduire les démangeaisons, puis à faire disparaître les cicatrices, jour après jour.</p>
-      <p class="suite-titre">… peut disparaître en <span class="mot-or">30 jours</span> !</p>
+      <p class="suite-titre">… peut disparaître en <span class="mot-vert">30 jours</span> !</p>
       <div class="actions">
         <a class="bouton" href="#prix">Je veux commander.</a>
         <a class="bouton bouton--fin" href="#preuve" style="background:transparent;color:var(--vert-fonce);border:1.6px solid var(--trait);">Voir les résultats.</a>
@@ -908,7 +931,7 @@ alt=""></noscript>
 <section class="stat-clients apparait">
   <div class="chiffre" id="compteur-clients" data-cible="9700">+ 0</div>
   <div class="libelle">Clients satisfaits</div>
-  <p class="place">Depuis <span class="annee-recul" id="annee-recul" data-cible="2010">2010</span>, en Côte d'Ivoire et à l'international.</p>
+  <p class="place">Depuis <span class="annee-recul" id="annee-recul" data-cible="2010">2010</span>, en Côte d'Ivoire et à l'international dans plus de <span class="annee-recul" id="compte-pays" data-cible="10">10</span> pays, et bientôt encore plus…</p>
 </section>
 
 <!-- ============ 3. Le problème ============ -->
@@ -1223,7 +1246,7 @@ alt=""></noscript>
 <section class="bloc bloc--vert" id="fabricant">
   <div class="enveloppe">
     <div class="apparait">
-      <p class="surtitre">Qui fabrique Kelostop.</p>
+      <p class="surtitre">Qui fabrique Kelostop ?</p>
       <h2>Une entreprise ivoirienne, connue et distinguée.</h2>
       <p class="chapo">Kelostop est fabriqué par <b style="color:#fff;">Glory's Cosmétique Rénovation</b>, dirigée par <b style="color:#fff;">Isaac ATTA</b>. Le fabricant est passé trois fois sur RTI1 et a reçu plusieurs distinctions officielles entre 2016 et 2021.</p>
       <div class="portrait-fabricant">
@@ -1335,11 +1358,11 @@ alt=""></noscript>
       </details>
       <details>
         <summary>Ma chéloïde est revenue après une opération. Est-ce que je peux l'utiliser ?</summary>
-        <div class="reponse"><p>C'est une situation très fréquente, et c'est justement ce genre de défis que nous apprécions. Kelostop est un soin cosmétique du quotidien, il ne remplace pas votre suivi médical. Cependant, nous sommes en partenariat avec des chirurgiens qui ont vu les miracles que fait notre produit. Si vous avez été opérée, venez tester Kelostop et vous témoignerez par vous-même.</p></div>
+        <div class="reponse"><p>C'est une situation très fréquente, et c'est justement ce genre de défis que nous apprécions. Kelostop est un soin cosmétique du quotidien, il ne remplace pas votre suivi médical. Cependant, nous sommes en partenariat avec des chirurgiens qui ont vu les miracles que fait notre produit. Si vous avez été opéré, venez tester Kelostop et vous témoignerez par vous-même.</p></div>
       </details>
       <details>
         <summary>Est-ce que ça marche sur l'oreille ?</summary>
-        <div class="reponse"><p>L'oreille après un piercing est la zone la plus citée par nos clientes. La crème s'applique sur la marque et autour, en couche fine, matin et soir.</p></div>
+        <div class="reponse"><p>L'oreille après un piercing est la zone la plus citée par nos clientes. Kelostop est efficace sur toute forme de chéloïdes, sur l'oreille comme sur d'autres parties du corps. <a href="#probleme" class="lien-vert">Cliquez ici pour revoir les parties concernées.</a> La crème s'applique sur la marque et autour, en couche fine, matin et soir.</p></div>
       </details>
       <details>
         <summary>Y a-t-il des effets indésirables ?</summary>
@@ -1359,7 +1382,7 @@ alt=""></noscript>
     <div class="apparait" style="text-align:center;max-width:640px;margin:0 auto;">
       <p class="surtitre" style="justify-content:center;">La commande.</p>
       <h2>On continue sur WhatsApp ?</h2>
-      <p class="chapo" style="margin:0 auto;">Deux minutes. Vos réponses nous évitent de vous poser dix questions, et nous permettent de préparer votre commande tout de suite, pour une livraison rapide.</p>
+      <p class="chapo" style="margin:0 auto;">Deux minutes. 02 questions pour nous permettre de préparer votre commande tout de suite, pour une livraison rapide.</p>
     </div>
 
     <div class="form-carte apparait">
@@ -1370,11 +1393,11 @@ alt=""></noscript>
         <div class="champs">
           <div class="demi">
             <label for="nom">Nom.</label>
-            <input type="text" id="nom" name="nom" required autocomplete="family-name">
+            <input type="text" id="nom" name="nom" required autocomplete="family-name" maxlength="20" inputmode="text" pattern="[A-Za-zÀ-ÖØ-öø-ÿ ’'\-]{1,20}" title="Lettres, espaces, apostrophes et tirets seulement. Vingt caractères au maximum.">
           </div>
           <div class="demi">
             <label for="prenom">Prénom.</label>
-            <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
+            <input type="text" id="prenom" name="prenom" required autocomplete="given-name" maxlength="20" inputmode="text" pattern="[A-Za-zÀ-ÖØ-öø-ÿ ’'\-]{1,20}" title="Lettres, espaces, apostrophes et tirets seulement. Vingt caractères au maximum.">
           </div>
 
           <div class="demi champ-suggest">
@@ -1387,7 +1410,7 @@ alt=""></noscript>
             <label for="contact">Numéro WhatsApp.</label>
             <div class="tel-groupe">
               <input type="text" id="indicatif" name="indicatif" class="indicatif" value="+225" autocomplete="off" aria-label="Indicatif du pays.">
-              <input type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="07 00 00 00 00">
+              <input type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="07 00 00 00 00" maxlength="26" inputmode="tel" title="Vingt chiffres au maximum.">
             </div>
           </div>
 
@@ -1491,7 +1514,7 @@ alt=""></noscript>
       </div>
       <div>
         <h3>Aller à.</h3>
-        <p><a href="#preuve">Les résultats.</a><br><a href="#prix" class="lien-commander">Commander.</a></p>
+        <p><a href="#preuve">Les résultats.</a><br><a href="#commander" class="lien-commander">Je passe ma commande.</a></p>
       </div>
     </div>
     <div class="legal">
@@ -1522,6 +1545,10 @@ alt=""></noscript>
 <a class="pot-flottant" id="pot-flottant" href="#prix" aria-label="Commander Kelostop.">
   <img src="images/pot-kelostop.jpg" alt="Pot de crème Kelostop.">
 </a>
+
+<button type="button" class="haut-rapide" id="haut-rapide" aria-label="Revenir en haut de la page.">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6,14 12,8 18,14"/></svg>
+</button>
 
 <div class="barre-pouce">
   <div class="prix">22 500 FCFA<small>Livré gratuitement à Abidjan.</small></div>
@@ -1818,6 +1845,119 @@ alt=""></noscript>
     });
   }
 
+  /* ---- Bouton de retour en haut ---- */
+  var versHaut = document.getElementById('haut-rapide');
+  if(versHaut){
+    var majHaut = function(){
+      versHaut.classList.toggle('visible', window.scrollY > 400);
+    };
+    window.addEventListener('scroll', majHaut, {passive:true});
+    versHaut.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+    majHaut();
+  }
+
+  /* ---- Les liens internes visent juste, même si les images arrivent en retard ---- */
+  var hauteurEntete = function(){
+    var e = document.querySelector('.entete');
+    return e ? e.getBoundingClientRect().height + 8 : 0;
+  };
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(ev){
+      var id = a.getAttribute('href');
+      if(id === '#' || id.length < 2) return;
+      var cible = document.getElementById(id.slice(1));
+      if(!cible) return;
+      ev.preventDefault();
+
+      var aller = function(){
+        var y = cible.getBoundingClientRect().top + window.scrollY - hauteurEntete();
+        window.scrollTo({top:Math.max(0, y), behavior:'smooth'});
+      };
+      aller();
+      /* Deuxième passage : si une image s'est chargée entre-temps, on recale. */
+      window.setTimeout(aller, 420);
+      window.setTimeout(function(){
+        var ecart = Math.abs(cible.getBoundingClientRect().top - hauteurEntete());
+        if(ecart > 40) aller();
+      }, 900);
+    });
+  });
+
+  /* ---- Le pays est deviné par le fuseau horaire, sans rien demander ---- */
+  var ZONES = [['Europe/Andorra','Andorre'],['Asia/Dubai','Émirats arabes unis'],['Asia/Kabul','Afghanistan'],['America/Antigua','Antigua-et-Barbuda'],['Europe/Tirane','Albanie'],['Asia/Yerevan','Arménie'],['Africa/Luanda','Angola'],['America/Argentina/Buenos_Aires','Argentine'],['America/Argentina/Cordoba','Argentine'],['America/Argentina/Salta','Argentine'],['America/Argentina/Jujuy','Argentine'],['America/Argentina/Tucuman','Argentine'],['America/Argentina/Catamarca','Argentine'],['America/Argentina/La_Rioja','Argentine'],['America/Argentina/San_Juan','Argentine'],['America/Argentina/Mendoza','Argentine'],['America/Argentina/San_Luis','Argentine'],['America/Argentina/Rio_Gallegos','Argentine'],['America/Argentina/Ushuaia','Argentine'],['Europe/Vienna','Autriche'],['Australia/Lord_Howe','Australie'],['Antarctica/Macquarie','Australie'],['Australia/Hobart','Australie'],['Australia/Melbourne','Australie'],['Australia/Sydney','Australie'],['Australia/Broken_Hill','Australie'],['Australia/Brisbane','Australie'],['Australia/Lindeman','Australie'],['Australia/Adelaide','Australie'],['Australia/Darwin','Australie'],['Australia/Perth','Australie'],['Australia/Eucla','Australie'],['Asia/Baku','Azerbaïdjan'],['Europe/Sarajevo','Bosnie-Herzégovine'],['America/Barbados','Barbade'],['Asia/Dhaka','Bangladesh'],['Europe/Brussels','Belgique'],['Africa/Ouagadougou','Burkina Faso'],['Europe/Sofia','Bulgarie'],['Asia/Bahrain','Bahreïn'],['Africa/Bujumbura','Burundi'],['Africa/Porto-Novo','Bénin'],['Asia/Brunei','Brunei'],['America/La_Paz','Bolivie'],['America/Noronha','Brésil'],['America/Belem','Brésil'],['America/Fortaleza','Brésil'],['America/Recife','Brésil'],['America/Araguaina','Brésil'],['America/Maceio','Brésil'],['America/Bahia','Brésil'],['America/Sao_Paulo','Brésil'],['America/Campo_Grande','Brésil'],['America/Cuiaba','Brésil'],['America/Santarem','Brésil'],['America/Porto_Velho','Brésil'],['America/Boa_Vista','Brésil'],['America/Manaus','Brésil'],['America/Eirunepe','Brésil'],['America/Rio_Branco','Brésil'],['America/Nassau','Bahamas'],['Asia/Thimphu','Bhoutan'],['Africa/Gaborone','Botswana'],['Europe/Minsk','Biélorussie'],['America/Belize','Belize'],['America/St_Johns','Canada'],['America/Halifax','Canada'],['America/Glace_Bay','Canada'],['America/Moncton','Canada'],['America/Goose_Bay','Canada'],['America/Blanc-Sablon','Canada'],['America/Toronto','Canada'],['America/Iqaluit','Canada'],['America/Atikokan','Canada'],['America/Winnipeg','Canada'],['America/Resolute','Canada'],['America/Rankin_Inlet','Canada'],['America/Regina','Canada'],['America/Swift_Current','Canada'],['America/Edmonton','Canada'],['America/Cambridge_Bay','Canada'],['America/Inuvik','Canada'],['America/Vancouver','Canada'],['America/Creston','Canada'],['America/Dawson_Creek','Canada'],['America/Fort_Nelson','Canada'],['America/Whitehorse','Canada'],['America/Dawson','Canada'],['Africa/Kinshasa','RD Congo'],['Africa/Lubumbashi','RD Congo'],['Africa/Bangui','Centrafrique'],['Africa/Brazzaville','Congo'],['Europe/Zurich','Suisse'],['Africa/Abidjan','Côte d’Ivoire'],['America/Santiago','Chili'],['America/Coyhaique','Chili'],['America/Punta_Arenas','Chili'],['Pacific/Easter','Chili'],['Africa/Douala','Cameroun'],['Asia/Shanghai','Chine'],['Asia/Urumqi','Chine'],['America/Bogota','Colombie'],['America/Costa_Rica','Costa Rica'],['America/Havana','Cuba'],['Atlantic/Cape_Verde','Cap-Vert'],['Asia/Nicosia','Chypre'],['Asia/Famagusta','Chypre'],['Europe/Prague','Tchéquie'],['Europe/Berlin','Allemagne'],['Europe/Busingen','Allemagne'],['Africa/Djibouti','Djibouti'],['Europe/Copenhagen','Danemark'],['America/Dominica','Dominique'],['America/Santo_Domingo','République dominicaine'],['Africa/Algiers','Algérie'],['America/Guayaquil','Équateur'],['Pacific/Galapagos','Équateur'],['Europe/Tallinn','Estonie'],['Africa/Cairo','Égypte'],['Africa/Asmara','Érythrée'],['Europe/Madrid','Espagne'],['Africa/Ceuta','Espagne'],['Atlantic/Canary','Espagne'],['Africa/Addis_Ababa','Éthiopie'],['Europe/Helsinki','Finlande'],['Pacific/Fiji','Fidji'],['Pacific/Chuuk','Micronésie'],['Pacific/Pohnpei','Micronésie'],['Pacific/Kosrae','Micronésie'],['Europe/Paris','France'],['Africa/Libreville','Gabon'],['Europe/London','Royaume-Uni'],['America/Grenada','Grenade'],['Asia/Tbilisi','Géorgie'],['Africa/Accra','Ghana'],['Africa/Banjul','Gambie'],['Africa/Conakry','Guinée'],['Africa/Malabo','Guinée équatoriale'],['Europe/Athens','Grèce'],['America/Guatemala','Guatemala'],['Africa/Bissau','Guinée-Bissau'],['America/Guyana','Guyana'],['America/Tegucigalpa','Honduras'],['Europe/Zagreb','Croatie'],['America/Port-au-Prince','Haïti'],['Europe/Budapest','Hongrie'],['Asia/Jakarta','Indonésie'],['Asia/Pontianak','Indonésie'],['Asia/Makassar','Indonésie'],['Asia/Jayapura','Indonésie'],['Europe/Dublin','Irlande'],['Asia/Jerusalem','Israël'],['Asia/Kolkata','Inde'],['Asia/Baghdad','Irak'],['Asia/Tehran','Iran'],['Atlantic/Reykjavik','Islande'],['Europe/Rome','Italie'],['America/Jamaica','Jamaïque'],['Asia/Amman','Jordanie'],['Asia/Tokyo','Japon'],['Africa/Nairobi','Kenya'],['Asia/Bishkek','Kirghizistan'],['Asia/Phnom_Penh','Cambodge'],['Pacific/Tarawa','Kiribati'],['Pacific/Kanton','Kiribati'],['Pacific/Kiritimati','Kiribati'],['Indian/Comoro','Comores'],['America/St_Kitts','Saint-Christophe-et-Niévès'],['Asia/Pyongyang','Corée du Nord'],['Asia/Seoul','Corée du Sud'],['Asia/Kuwait','Koweït'],['Asia/Almaty','Kazakhstan'],['Asia/Qyzylorda','Kazakhstan'],['Asia/Qostanay','Kazakhstan'],['Asia/Aqtobe','Kazakhstan'],['Asia/Aqtau','Kazakhstan'],['Asia/Atyrau','Kazakhstan'],['Asia/Oral','Kazakhstan'],['Asia/Vientiane','Laos'],['Asia/Beirut','Liban'],['America/St_Lucia','Sainte-Lucie'],['Europe/Vaduz','Liechtenstein'],['Asia/Colombo','Sri Lanka'],['Africa/Monrovia','Liberia'],['Africa/Maseru','Lesotho'],['Europe/Vilnius','Lituanie'],['Europe/Luxembourg','Luxembourg'],['Europe/Riga','Lettonie'],['Africa/Tripoli','Libye'],['Africa/Casablanca','Maroc'],['Europe/Monaco','Monaco'],['Europe/Chisinau','Moldavie'],['Europe/Podgorica','Monténégro'],['Indian/Antananarivo','Madagascar'],['Pacific/Majuro','Îles Marshall'],['Pacific/Kwajalein','Îles Marshall'],['Europe/Skopje','Macédoine du Nord'],['Africa/Bamako','Mali'],['Asia/Yangon','Birmanie'],['Asia/Ulaanbaatar','Mongolie'],['Asia/Hovd','Mongolie'],['Africa/Nouakchott','Mauritanie'],['Europe/Malta','Malte'],['Indian/Mauritius','Îles Maurice'],['Indian/Maldives','Maldives'],['Africa/Blantyre','Malawi'],['America/Mexico_City','Mexique'],['America/Cancun','Mexique'],['America/Merida','Mexique'],['America/Monterrey','Mexique'],['America/Matamoros','Mexique'],['America/Chihuahua','Mexique'],['America/Ciudad_Juarez','Mexique'],['America/Ojinaga','Mexique'],['America/Mazatlan','Mexique'],['America/Bahia_Banderas','Mexique'],['America/Hermosillo','Mexique'],['America/Tijuana','Mexique'],['Asia/Kuala_Lumpur','Malaisie'],['Asia/Kuching','Malaisie'],['Africa/Maputo','Mozambique'],['Africa/Windhoek','Namibie'],['Africa/Niamey','Niger'],['Africa/Lagos','Nigeria'],['America/Managua','Nicaragua'],['Europe/Amsterdam','Pays-Bas'],['Europe/Oslo','Norvège'],['Asia/Kathmandu','Népal'],['Pacific/Nauru','Nauru'],['Pacific/Auckland','Nouvelle-Zélande'],['Pacific/Chatham','Nouvelle-Zélande'],['Asia/Muscat','Oman'],['America/Panama','Panama'],['America/Lima','Pérou'],['Pacific/Port_Moresby','Papouasie-Nouvelle-Guinée'],['Pacific/Bougainville','Papouasie-Nouvelle-Guinée'],['Asia/Manila','Philippines'],['Asia/Karachi','Pakistan'],['Europe/Warsaw','Pologne'],['Europe/Lisbon','Portugal'],['Atlantic/Madeira','Portugal'],['Atlantic/Azores','Portugal'],['Pacific/Palau','Palaos (Palau)'],['America/Asuncion','Paraguay'],['Asia/Qatar','Qatar'],['Europe/Bucharest','Roumanie'],['Europe/Belgrade','Serbie'],['Europe/Kaliningrad','Russie'],['Europe/Moscow','Russie'],['Europe/Simferopol','Ukraine'],['Europe/Kirov','Russie'],['Europe/Volgograd','Russie'],['Europe/Astrakhan','Russie'],['Europe/Saratov','Russie'],['Europe/Ulyanovsk','Russie'],['Europe/Samara','Russie'],['Asia/Yekaterinburg','Russie'],['Asia/Omsk','Russie'],['Asia/Novosibirsk','Russie'],['Asia/Barnaul','Russie'],['Asia/Tomsk','Russie'],['Asia/Novokuznetsk','Russie'],['Asia/Krasnoyarsk','Russie'],['Asia/Irkutsk','Russie'],['Asia/Chita','Russie'],['Asia/Yakutsk','Russie'],['Asia/Khandyga','Russie'],['Asia/Vladivostok','Russie'],['Asia/Ust-Nera','Russie'],['Asia/Magadan','Russie'],['Asia/Sakhalin','Russie'],['Asia/Srednekolymsk','Russie'],['Asia/Kamchatka','Russie'],['Asia/Anadyr','Russie'],['Africa/Kigali','Rwanda'],['Asia/Riyadh','Arabie Saoudite'],['Pacific/Guadalcanal','Îles Salomon'],['Indian/Mahe','Seychelles'],['Africa/Khartoum','Soudan'],['Europe/Stockholm','Suède'],['Asia/Singapore','Singapour'],['Europe/Ljubljana','Slovénie'],['Europe/Bratislava','Slovaquie'],['Africa/Freetown','Sierra Leone'],['Europe/San_Marino','Saint-Marin'],['Africa/Dakar','Sénégal'],['Africa/Mogadishu','Somalie'],['America/Paramaribo','Surinam'],['Africa/Juba','Soudan du Sud'],['Africa/Sao_Tome','São Tomé et Príncipe'],['America/El_Salvador','Salvador'],['Asia/Damascus','Syrie'],['Africa/Mbabane','Eswatini'],['Africa/Ndjamena','Tchad'],['Africa/Lome','Togo'],['Asia/Bangkok','Thaïlande'],['Asia/Dushanbe','Tadjikistan'],['Asia/Dili','Timor oriental'],['Asia/Ashgabat','Turkménistan'],['Africa/Tunis','Tunisie'],['Pacific/Tongatapu','Tonga'],['Europe/Istanbul','Turquie'],['America/Port_of_Spain','Trinité-et-Tobago'],['Pacific/Funafuti','Tuvalu'],['Africa/Dar_es_Salaam','Tanzanie'],['Europe/Kyiv','Ukraine'],['Africa/Kampala','Ouganda'],['America/New_York','États-Unis'],['America/Detroit','États-Unis'],['America/Kentucky/Louisville','États-Unis'],['America/Kentucky/Monticello','États-Unis'],['America/Indiana/Indianapolis','États-Unis'],['America/Indiana/Vincennes','États-Unis'],['America/Indiana/Winamac','États-Unis'],['America/Indiana/Marengo','États-Unis'],['America/Indiana/Petersburg','États-Unis'],['America/Indiana/Vevay','États-Unis'],['America/Chicago','États-Unis'],['America/Indiana/Tell_City','États-Unis'],['America/Indiana/Knox','États-Unis'],['America/Menominee','États-Unis'],['America/North_Dakota/Center','États-Unis'],['America/North_Dakota/New_Salem','États-Unis'],['America/North_Dakota/Beulah','États-Unis'],['America/Denver','États-Unis'],['America/Boise','États-Unis'],['America/Phoenix','États-Unis'],['America/Los_Angeles','États-Unis'],['America/Anchorage','États-Unis'],['America/Juneau','États-Unis'],['America/Sitka','États-Unis'],['America/Metlakatla','États-Unis'],['America/Yakutat','États-Unis'],['America/Nome','États-Unis'],['America/Adak','États-Unis'],['Pacific/Honolulu','États-Unis'],['America/Montevideo','Uruguay'],['Asia/Samarkand','Ouzbékistan'],['Asia/Tashkent','Ouzbékistan'],['Europe/Vatican','Cité du Vatican'],['America/St_Vincent','Saint-Vincent-et-les-Grenadines'],['America/Caracas','Venezuela'],['Asia/Ho_Chi_Minh','Viêt Nam'],['Pacific/Efate','Vanuatu'],['Pacific/Apia','Samoa'],['Asia/Aden','Yémen'],['Africa/Johannesburg','Afrique du Sud'],['Africa/Lusaka','Zambie'],['Africa/Harare','Zimbabwe']];
+  (function(){
+    var champ = document.getElementById('pays');
+    var ind = document.getElementById('indicatif');
+    if(!champ || !ind || champ.value) return;
+    var zone;
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch(e){ return; }
+    if(!zone) return;
+    for(var i = 0; i < ZONES.length; i++){
+      if(ZONES[i][0] === zone){
+        var nom = ZONES[i][1];
+        champ.value = nom;
+        for(var j = 0; j < PAYS.length; j++){
+          if(PAYS[j][0] === nom){ ind.value = PAYS[j][1]; break; }
+        }
+        return;
+      }
+    }
+  })();
+
+  /* ---- On décourage la récupération des images ---- */
+  document.addEventListener('contextmenu', function(ev){
+    if(ev.target && ev.target.tagName === 'IMG') ev.preventDefault();
+  });
+  document.addEventListener('dragstart', function(ev){
+    if(ev.target && ev.target.tagName === 'IMG') ev.preventDefault();
+  });
+
+  /* ---- Garde-fous de saisie ---- */
+  var lettresSeules = function(champ){
+    if(!champ) return;
+    var nettoie = function(){
+      /* Lettres, accents, espace, apostrophe et tiret : les noms composés restent possibles. */
+      var v = champ.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ \u2019'\-]/g, '');
+      if(v.length > 20) v = v.slice(0, 20);
+      if(v !== champ.value) champ.value = v;
+    };
+    champ.addEventListener('input', nettoie);
+    champ.addEventListener('blur', nettoie);
+  };
+  lettresSeules(document.getElementById('nom'));
+  lettresSeules(document.getElementById('prenom'));
+
+  var champTel = document.getElementById('contact');
+  if(champTel){
+    var nettoieTel = function(){
+      /* On garde les espaces pour la lisibilité, mais jamais plus de vingt chiffres. */
+      var v = champTel.value.replace(/[^0-9 ]/g, '');
+      var chiffres = v.replace(/ /g, '');
+      if(chiffres.length > 20){
+        var gardes = 0, sortie = '';
+        for(var i = 0; i < v.length; i++){
+          if(v.charAt(i) === ' '){ sortie += ' '; continue; }
+          if(gardes < 20){ sortie += v.charAt(i); gardes++; }
+        }
+        v = sortie;
+      }
+      if(v !== champTel.value) champTel.value = v;
+    };
+    champTel.addEventListener('input', nettoieTel);
+    champTel.addEventListener('blur', nettoieTel);
+  }
+
+  /* La date de livraison va d'aujourd'hui au 31 décembre de l'année suivante. */
+  var champDate = document.getElementById('livraison_date');
+  if(champDate){
+    var jour = new Date();
+    var deuxChiffres = function(n){ return (n < 10 ? '0' : '') + n; };
+    champDate.min = jour.getFullYear() + '-' + deuxChiffres(jour.getMonth()+1) + '-' + deuxChiffres(jour.getDate());
+    champDate.max = (jour.getFullYear() + 1) + '-12-31';
+  }
+
   /* ---- Champ libre si la zone est "Autre" ---- */
   var selZone = document.getElementById('zone');
   var blocAutre = document.getElementById('bloc-zone-autre');
@@ -1909,6 +2049,41 @@ alt=""></noscript>
       oa.observe(annee);
     } else {
       reculer();
+    }
+  }
+
+  /* ---- Le nombre de pays livrés monte de zéro jusqu'à sa valeur ---- */
+  var nbPays = document.getElementById('compte-pays');
+  if(nbPays){
+    var butPays = parseInt(nbPays.getAttribute('data-cible'), 10) || 0;
+    var lancePays = false;
+    var monterPays = function(){
+      if(lancePays) return;
+      lancePays = true;
+      var duree = 1500, deb = null;
+      var pasPays = function(horo){
+        if(deb === null) deb = horo;
+        var av = Math.min((horo - deb) / duree, 1);
+        var doux = 1 - Math.pow(1 - av, 3);
+        nbPays.textContent = Math.round(butPays * doux);
+        if(av < 1) window.requestAnimationFrame(pasPays);
+        else nbPays.textContent = butPays;
+      };
+      nbPays.textContent = '0';
+      window.requestAnimationFrame(pasPays);
+    };
+    var peuAnim = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(peuAnim){
+      nbPays.textContent = butPays;
+    } else if('IntersectionObserver' in window){
+      var opays = new IntersectionObserver(function(e){
+        e.forEach(function(x){
+          if(x.isIntersecting){ monterPays(); } else { lancePays = false; }
+        });
+      }, {threshold:.4});
+      opays.observe(nbPays);
+    } else {
+      monterPays();
     }
   }
 
@@ -2041,21 +2216,22 @@ alt=""></noscript>
         zoneTexte = 'Autre : ' + d.get('zone_autre');
       }
 
+      /* Les étoiles mettent l'intitulé en gras dans WhatsApp, pour une lecture rapide. */
       var texte =
         'Bonjour, je viens du site Kelostop et je souhaite commander.' + '\n\n' +
-        'Nom : ' + (d.get('nom')||'') + '\n' +
-        'Prénom : ' + (d.get('prenom')||'') + '\n' +
-        'Pays : ' + (d.get('pays')||'') + '\n' +
-        'Contact : ' + (d.get('indicatif')||'') + ' ' + (d.get('contact')||'') + '\n' +
-        'Localisation pour la livraison : ' + (d.get('localisation')||'') + '\n' +
-        'Où se situe la cicatrice : ' + zoneTexte + '\n' +
-        'Depuis : ' + (d.get('anciennete')||'');
+        '*Nom :* ' + (d.get('nom')||'') + '\n' +
+        '*Prénom :* ' + (d.get('prenom')||'') + '\n' +
+        '*Pays :* ' + (d.get('pays')||'') + '\n' +
+        '*Contact :* ' + (d.get('indicatif')||'') + ' ' + (d.get('contact')||'') + '\n' +
+        '*Localisation pour la livraison :* ' + (d.get('localisation')||'') + '\n' +
+        '*Où se situe la cicatrice :* ' + zoneTexte + '\n' +
+        '*Depuis :* ' + (d.get('anciennete')||'');
 
       /* Les précisions de livraison ne sont ajoutées que si elles sont remplies. */
       var sup = [];
-      if(d.get('livraison_date'))  sup.push('Date souhaitée : ' + d.get('livraison_date'));
-      if(d.get('livraison_heure')) sup.push('Heure de préférence : ' + d.get('livraison_heure'));
-      if(d.get('livraison_autre')) sup.push('Autre précision : ' + d.get('livraison_autre'));
+      if(d.get('livraison_date'))  sup.push('*Date souhaitée :* ' + d.get('livraison_date'));
+      if(d.get('livraison_heure')) sup.push('*Heure de préférence :* ' + d.get('livraison_heure'));
+      if(d.get('livraison_autre')) sup.push('*Autre précision :* ' + d.get('livraison_autre'));
       if(sup.length) texte += '\n' + sup.join('\n');
 
       var lien = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(texte);
