@@ -1414,9 +1414,15 @@ alt=""></noscript>
             </div>
           </div>
 
-          <div class="plein">
+          <div class="demi">
+            <label for="ville">Votre ville.</label>
+            <input type="text" id="ville" name="ville" required maxlength="40" placeholder="Abidjan, Bouaké, Douala…">
+            <p class="note-champ" id="note-livraison">Livraison gratuite à Abidjan. Ailleurs, l'expédition est à votre charge.</p>
+          </div>
+
+          <div class="demi">
             <label for="localisation">Localisation exacte pour la livraison.</label>
-            <input type="text" id="localisation" name="localisation" required placeholder="Ville, quartier, point de repère">
+            <input type="text" id="localisation" name="localisation" required maxlength="90" placeholder="Quartier, rue, point de repère">
           </div>
 
           <div class="demi">
@@ -1914,6 +1920,48 @@ alt=""></noscript>
     if(ev.target && ev.target.tagName === 'IMG') ev.preventDefault();
   });
 
+  /* ---- Abidjan et ses communes donnent droit à la livraison gratuite ---- */
+  var COMMUNES_ABIDJAN = ['abidjan','abobo','adjame','anyama','attecoube','bingerville',
+    'cocody','koumassi','marcory','plateau','portbouet','songon','treichville','yopougon',
+    'riviera','angre','deuxplateaux','bietry','zone4','adjouffou','niangon','locodjoro'];
+
+  var sansAccent = function(x){
+    return (x||'').toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+  };
+
+  var estAbidjan = function(ville){
+    var v = sansAccent(ville);
+    if(!v) return false;
+    for(var i = 0; i < COMMUNES_ABIDJAN.length; i++){
+      if(v.indexOf(COMMUNES_ABIDJAN[i]) !== -1) return true;
+    }
+    return false;
+  };
+
+  /* La note sous le champ ville dit tout de suite ce que la livraison coûtera. */
+  var champVille = document.getElementById('ville');
+  var noteLivr = document.getElementById('note-livraison');
+  if(champVille && noteLivr){
+    var majLivraison = function(){
+      if(!champVille.value.trim()){
+        noteLivr.textContent = "Livraison gratuite à Abidjan. Ailleurs, l'expédition est à votre charge.";
+        noteLivr.style.borderLeftColor = 'var(--or)';
+        return;
+      }
+      if(estAbidjan(champVille.value)){
+        noteLivr.textContent = 'Livraison gratuite. Vous payez seulement le pot, à la réception.';
+        noteLivr.style.borderLeftColor = 'var(--vert)';
+      } else {
+        noteLivr.textContent = "Hors Abidjan : l'expédition est à votre charge. Le montant exact vous est annoncé sur WhatsApp avant l'envoi.";
+        noteLivr.style.borderLeftColor = 'var(--or)';
+      }
+    };
+    champVille.addEventListener('input', majLivraison);
+    champVille.addEventListener('blur', majLivraison);
+    majLivraison();
+  }
+
   /* ---- Garde-fous de saisie ---- */
   var lettresSeules = function(champ){
     if(!champ) return;
@@ -2136,24 +2184,31 @@ alt=""></noscript>
     var surTelephone = function(){ return window.matchMedia('(max-width:1179px)').matches; };
     var replier = function(){ som.classList.remove('deploye'); };
 
+    /* En phase de capture : on intercepte AVANT que le lien ne réagisse.
+       Sans cela, le lien partait vers sa section avant que le menu ne s'ouvre. */
     som.addEventListener('click', function(ev){
       if(!surTelephone()) return;
-      var lien = ev.target.closest('a');
       if(!som.classList.contains('deploye')){
-        /* Premier appui : on déplie, sans encore naviguer. */
+        /* Premier appui : on déplie seulement, la navigation est bloquée net. */
         ev.preventDefault();
+        ev.stopPropagation();
         som.classList.add('deploye');
         return;
       }
-      /* Sommaire déjà déplié : l'appui sur un lien navigue, puis on referme. */
-      if(lien) setTimeout(replier, 420);
-    });
+      /* Menu déjà ouvert : l'appui sur un libellé navigue, puis on referme. */
+      var lien = ev.target.closest ? ev.target.closest('a') : null;
+      if(lien) window.setTimeout(replier, 500);
+    }, true);
 
     document.addEventListener('click', function(ev){
       if(surTelephone() && !som.contains(ev.target)) replier();
     });
+    var dernierY = window.scrollY;
     window.addEventListener('scroll', function(){
-      if(surTelephone() && som.classList.contains('deploye')) replier();
+      /* On ne referme que si le visiteur fait défiler pour de bon. */
+      if(surTelephone() && som.classList.contains('deploye')
+         && Math.abs(window.scrollY - dernierY) > 60) replier();
+      dernierY = window.scrollY;
     }, {passive:true});
   }
 
@@ -2223,7 +2278,8 @@ alt=""></noscript>
         '*Prénom :* ' + (d.get('prenom')||'') + '\n' +
         '*Pays :* ' + (d.get('pays')||'') + '\n' +
         '*Contact :* ' + (d.get('indicatif')||'') + ' ' + (d.get('contact')||'') + '\n' +
-        '*Localisation pour la livraison :* ' + (d.get('localisation')||'') + '\n' +
+        '*Ville :* ' + (d.get('ville')||'') + '\n' +
+        '*Localisation exacte :* ' + (d.get('localisation')||'') + '\n' +
         '*Où se situe la cicatrice :* ' + zoneTexte + '\n' +
         '*Depuis :* ' + (d.get('anciennete')||'');
 
@@ -2233,6 +2289,11 @@ alt=""></noscript>
       if(d.get('livraison_heure')) sup.push('*Heure de préférence :* ' + d.get('livraison_heure'));
       if(d.get('livraison_autre')) sup.push('*Autre précision :* ' + d.get('livraison_autre'));
       if(sup.length) texte += '\n' + sup.join('\n');
+
+      /* Prix et livraison, calculés à partir de la ville saisie. */
+      texte += '\n\n' + '*Prix du produit :* 22 500 FCFA';
+      texte += '\n' + '*Livraison :* ' +
+               (estAbidjan(d.get('ville')) ? 'gratuite' : 'vous payez l\'expédition');
 
       var lien = 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(texte);
 
