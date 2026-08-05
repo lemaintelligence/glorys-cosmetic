@@ -1409,7 +1409,7 @@ alt=""></noscript>
           <div class="demi">
             <label for="contact">Numéro WhatsApp.</label>
             <div class="tel-groupe">
-              <input type="text" id="indicatif" name="indicatif" class="indicatif" value="+225" autocomplete="off" aria-label="Indicatif du pays.">
+              <input type="text" id="indicatif" name="indicatif" class="indicatif" value="" autocomplete="off" aria-label="Indicatif du pays.">
               <input type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="07 00 00 00 00" maxlength="26" inputmode="tel" title="Vingt chiffres au maximum.">
             </div>
           </div>
@@ -1892,24 +1892,53 @@ alt=""></noscript>
   });
 
   /* ---- Le pays est deviné par le fuseau horaire, sans rien demander ---- */
+  /* Territoires rattachés à un pays de la liste, avec leur propre indicatif. */
+  var ZONES_RATTACHEES = [
+    ['Indian/Reunion','France','+262'],['Indian/Mayotte','France','+262'],
+    ['America/Guadeloupe','France','+590'],['America/Martinique','France','+596'],
+    ['America/Cayenne','France','+594'],['Pacific/Noumea','France','+687'],
+    ['Pacific/Tahiti','France','+689'],['America/Miquelon','France','+508'],
+    ['Europe/Jersey','Royaume-Uni','+44'],['Europe/Guernsey','Royaume-Uni','+44'],
+    ['Europe/Isle_of_Man','Royaume-Uni','+44'],['Europe/Gibraltar','Royaume-Uni','+350'],
+    ['America/Puerto_Rico','États-Unis','+1'],['Pacific/Honolulu','États-Unis','+1'],
+    ['Atlantic/Canary','Espagne','+34'],['Africa/Ceuta','Espagne','+34'],
+    ['Atlantic/Madeira','Portugal','+351'],['Atlantic/Azores','Portugal','+351'],
+    ['Europe/Zurich','Suisse','+41']
+  ];
+
   var ZONES = [['Europe/Andorra','Andorre'],['Asia/Dubai','Émirats arabes unis'],['Asia/Kabul','Afghanistan'],['America/Antigua','Antigua-et-Barbuda'],['Europe/Tirane','Albanie'],['Asia/Yerevan','Arménie'],['Africa/Luanda','Angola'],['America/Argentina/Buenos_Aires','Argentine'],['America/Argentina/Cordoba','Argentine'],['America/Argentina/Salta','Argentine'],['America/Argentina/Jujuy','Argentine'],['America/Argentina/Tucuman','Argentine'],['America/Argentina/Catamarca','Argentine'],['America/Argentina/La_Rioja','Argentine'],['America/Argentina/San_Juan','Argentine'],['America/Argentina/Mendoza','Argentine'],['America/Argentina/San_Luis','Argentine'],['America/Argentina/Rio_Gallegos','Argentine'],['America/Argentina/Ushuaia','Argentine'],['Europe/Vienna','Autriche'],['Australia/Lord_Howe','Australie'],['Antarctica/Macquarie','Australie'],['Australia/Hobart','Australie'],['Australia/Melbourne','Australie'],['Australia/Sydney','Australie'],['Australia/Broken_Hill','Australie'],['Australia/Brisbane','Australie'],['Australia/Lindeman','Australie'],['Australia/Adelaide','Australie'],['Australia/Darwin','Australie'],['Australia/Perth','Australie'],['Australia/Eucla','Australie'],['Asia/Baku','Azerbaïdjan'],['Europe/Sarajevo','Bosnie-Herzégovine'],['America/Barbados','Barbade'],['Asia/Dhaka','Bangladesh'],['Europe/Brussels','Belgique'],['Africa/Ouagadougou','Burkina Faso'],['Europe/Sofia','Bulgarie'],['Asia/Bahrain','Bahreïn'],['Africa/Bujumbura','Burundi'],['Africa/Porto-Novo','Bénin'],['Asia/Brunei','Brunei'],['America/La_Paz','Bolivie'],['America/Noronha','Brésil'],['America/Belem','Brésil'],['America/Fortaleza','Brésil'],['America/Recife','Brésil'],['America/Araguaina','Brésil'],['America/Maceio','Brésil'],['America/Bahia','Brésil'],['America/Sao_Paulo','Brésil'],['America/Campo_Grande','Brésil'],['America/Cuiaba','Brésil'],['America/Santarem','Brésil'],['America/Porto_Velho','Brésil'],['America/Boa_Vista','Brésil'],['America/Manaus','Brésil'],['America/Eirunepe','Brésil'],['America/Rio_Branco','Brésil'],['America/Nassau','Bahamas'],['Asia/Thimphu','Bhoutan'],['Africa/Gaborone','Botswana'],['Europe/Minsk','Biélorussie'],['America/Belize','Belize'],['America/St_Johns','Canada'],['America/Halifax','Canada'],['America/Glace_Bay','Canada'],['America/Moncton','Canada'],['America/Goose_Bay','Canada'],['America/Blanc-Sablon','Canada'],['America/Toronto','Canada'],['America/Iqaluit','Canada'],['America/Atikokan','Canada'],['America/Winnipeg','Canada'],['America/Resolute','Canada'],['America/Rankin_Inlet','Canada'],['America/Regina','Canada'],['America/Swift_Current','Canada'],['America/Edmonton','Canada'],['America/Cambridge_Bay','Canada'],['America/Inuvik','Canada'],['America/Vancouver','Canada'],['America/Creston','Canada'],['America/Dawson_Creek','Canada'],['America/Fort_Nelson','Canada'],['America/Whitehorse','Canada'],['America/Dawson','Canada'],['Africa/Kinshasa','RD Congo'],['Africa/Lubumbashi','RD Congo'],['Africa/Bangui','Centrafrique'],['Africa/Brazzaville','Congo'],['Europe/Zurich','Suisse'],['Africa/Abidjan','Côte d’Ivoire'],['America/Santiago','Chili'],['America/Coyhaique','Chili'],['America/Punta_Arenas','Chili'],['Pacific/Easter','Chili'],['Africa/Douala','Cameroun'],['Asia/Shanghai','Chine'],['Asia/Urumqi','Chine'],['America/Bogota','Colombie'],['America/Costa_Rica','Costa Rica'],['America/Havana','Cuba'],['Atlantic/Cape_Verde','Cap-Vert'],['Asia/Nicosia','Chypre'],['Asia/Famagusta','Chypre'],['Europe/Prague','Tchéquie'],['Europe/Berlin','Allemagne'],['Europe/Busingen','Allemagne'],['Africa/Djibouti','Djibouti'],['Europe/Copenhagen','Danemark'],['America/Dominica','Dominique'],['America/Santo_Domingo','République dominicaine'],['Africa/Algiers','Algérie'],['America/Guayaquil','Équateur'],['Pacific/Galapagos','Équateur'],['Europe/Tallinn','Estonie'],['Africa/Cairo','Égypte'],['Africa/Asmara','Érythrée'],['Europe/Madrid','Espagne'],['Africa/Ceuta','Espagne'],['Atlantic/Canary','Espagne'],['Africa/Addis_Ababa','Éthiopie'],['Europe/Helsinki','Finlande'],['Pacific/Fiji','Fidji'],['Pacific/Chuuk','Micronésie'],['Pacific/Pohnpei','Micronésie'],['Pacific/Kosrae','Micronésie'],['Europe/Paris','France'],['Africa/Libreville','Gabon'],['Europe/London','Royaume-Uni'],['America/Grenada','Grenade'],['Asia/Tbilisi','Géorgie'],['Africa/Accra','Ghana'],['Africa/Banjul','Gambie'],['Africa/Conakry','Guinée'],['Africa/Malabo','Guinée équatoriale'],['Europe/Athens','Grèce'],['America/Guatemala','Guatemala'],['Africa/Bissau','Guinée-Bissau'],['America/Guyana','Guyana'],['America/Tegucigalpa','Honduras'],['Europe/Zagreb','Croatie'],['America/Port-au-Prince','Haïti'],['Europe/Budapest','Hongrie'],['Asia/Jakarta','Indonésie'],['Asia/Pontianak','Indonésie'],['Asia/Makassar','Indonésie'],['Asia/Jayapura','Indonésie'],['Europe/Dublin','Irlande'],['Asia/Jerusalem','Israël'],['Asia/Kolkata','Inde'],['Asia/Baghdad','Irak'],['Asia/Tehran','Iran'],['Atlantic/Reykjavik','Islande'],['Europe/Rome','Italie'],['America/Jamaica','Jamaïque'],['Asia/Amman','Jordanie'],['Asia/Tokyo','Japon'],['Africa/Nairobi','Kenya'],['Asia/Bishkek','Kirghizistan'],['Asia/Phnom_Penh','Cambodge'],['Pacific/Tarawa','Kiribati'],['Pacific/Kanton','Kiribati'],['Pacific/Kiritimati','Kiribati'],['Indian/Comoro','Comores'],['America/St_Kitts','Saint-Christophe-et-Niévès'],['Asia/Pyongyang','Corée du Nord'],['Asia/Seoul','Corée du Sud'],['Asia/Kuwait','Koweït'],['Asia/Almaty','Kazakhstan'],['Asia/Qyzylorda','Kazakhstan'],['Asia/Qostanay','Kazakhstan'],['Asia/Aqtobe','Kazakhstan'],['Asia/Aqtau','Kazakhstan'],['Asia/Atyrau','Kazakhstan'],['Asia/Oral','Kazakhstan'],['Asia/Vientiane','Laos'],['Asia/Beirut','Liban'],['America/St_Lucia','Sainte-Lucie'],['Europe/Vaduz','Liechtenstein'],['Asia/Colombo','Sri Lanka'],['Africa/Monrovia','Liberia'],['Africa/Maseru','Lesotho'],['Europe/Vilnius','Lituanie'],['Europe/Luxembourg','Luxembourg'],['Europe/Riga','Lettonie'],['Africa/Tripoli','Libye'],['Africa/Casablanca','Maroc'],['Europe/Monaco','Monaco'],['Europe/Chisinau','Moldavie'],['Europe/Podgorica','Monténégro'],['Indian/Antananarivo','Madagascar'],['Pacific/Majuro','Îles Marshall'],['Pacific/Kwajalein','Îles Marshall'],['Europe/Skopje','Macédoine du Nord'],['Africa/Bamako','Mali'],['Asia/Yangon','Birmanie'],['Asia/Ulaanbaatar','Mongolie'],['Asia/Hovd','Mongolie'],['Africa/Nouakchott','Mauritanie'],['Europe/Malta','Malte'],['Indian/Mauritius','Îles Maurice'],['Indian/Maldives','Maldives'],['Africa/Blantyre','Malawi'],['America/Mexico_City','Mexique'],['America/Cancun','Mexique'],['America/Merida','Mexique'],['America/Monterrey','Mexique'],['America/Matamoros','Mexique'],['America/Chihuahua','Mexique'],['America/Ciudad_Juarez','Mexique'],['America/Ojinaga','Mexique'],['America/Mazatlan','Mexique'],['America/Bahia_Banderas','Mexique'],['America/Hermosillo','Mexique'],['America/Tijuana','Mexique'],['Asia/Kuala_Lumpur','Malaisie'],['Asia/Kuching','Malaisie'],['Africa/Maputo','Mozambique'],['Africa/Windhoek','Namibie'],['Africa/Niamey','Niger'],['Africa/Lagos','Nigeria'],['America/Managua','Nicaragua'],['Europe/Amsterdam','Pays-Bas'],['Europe/Oslo','Norvège'],['Asia/Kathmandu','Népal'],['Pacific/Nauru','Nauru'],['Pacific/Auckland','Nouvelle-Zélande'],['Pacific/Chatham','Nouvelle-Zélande'],['Asia/Muscat','Oman'],['America/Panama','Panama'],['America/Lima','Pérou'],['Pacific/Port_Moresby','Papouasie-Nouvelle-Guinée'],['Pacific/Bougainville','Papouasie-Nouvelle-Guinée'],['Asia/Manila','Philippines'],['Asia/Karachi','Pakistan'],['Europe/Warsaw','Pologne'],['Europe/Lisbon','Portugal'],['Atlantic/Madeira','Portugal'],['Atlantic/Azores','Portugal'],['Pacific/Palau','Palaos (Palau)'],['America/Asuncion','Paraguay'],['Asia/Qatar','Qatar'],['Europe/Bucharest','Roumanie'],['Europe/Belgrade','Serbie'],['Europe/Kaliningrad','Russie'],['Europe/Moscow','Russie'],['Europe/Simferopol','Ukraine'],['Europe/Kirov','Russie'],['Europe/Volgograd','Russie'],['Europe/Astrakhan','Russie'],['Europe/Saratov','Russie'],['Europe/Ulyanovsk','Russie'],['Europe/Samara','Russie'],['Asia/Yekaterinburg','Russie'],['Asia/Omsk','Russie'],['Asia/Novosibirsk','Russie'],['Asia/Barnaul','Russie'],['Asia/Tomsk','Russie'],['Asia/Novokuznetsk','Russie'],['Asia/Krasnoyarsk','Russie'],['Asia/Irkutsk','Russie'],['Asia/Chita','Russie'],['Asia/Yakutsk','Russie'],['Asia/Khandyga','Russie'],['Asia/Vladivostok','Russie'],['Asia/Ust-Nera','Russie'],['Asia/Magadan','Russie'],['Asia/Sakhalin','Russie'],['Asia/Srednekolymsk','Russie'],['Asia/Kamchatka','Russie'],['Asia/Anadyr','Russie'],['Africa/Kigali','Rwanda'],['Asia/Riyadh','Arabie Saoudite'],['Pacific/Guadalcanal','Îles Salomon'],['Indian/Mahe','Seychelles'],['Africa/Khartoum','Soudan'],['Europe/Stockholm','Suède'],['Asia/Singapore','Singapour'],['Europe/Ljubljana','Slovénie'],['Europe/Bratislava','Slovaquie'],['Africa/Freetown','Sierra Leone'],['Europe/San_Marino','Saint-Marin'],['Africa/Dakar','Sénégal'],['Africa/Mogadishu','Somalie'],['America/Paramaribo','Surinam'],['Africa/Juba','Soudan du Sud'],['Africa/Sao_Tome','São Tomé et Príncipe'],['America/El_Salvador','Salvador'],['Asia/Damascus','Syrie'],['Africa/Mbabane','Eswatini'],['Africa/Ndjamena','Tchad'],['Africa/Lome','Togo'],['Asia/Bangkok','Thaïlande'],['Asia/Dushanbe','Tadjikistan'],['Asia/Dili','Timor oriental'],['Asia/Ashgabat','Turkménistan'],['Africa/Tunis','Tunisie'],['Pacific/Tongatapu','Tonga'],['Europe/Istanbul','Turquie'],['America/Port_of_Spain','Trinité-et-Tobago'],['Pacific/Funafuti','Tuvalu'],['Africa/Dar_es_Salaam','Tanzanie'],['Europe/Kyiv','Ukraine'],['Africa/Kampala','Ouganda'],['America/New_York','États-Unis'],['America/Detroit','États-Unis'],['America/Kentucky/Louisville','États-Unis'],['America/Kentucky/Monticello','États-Unis'],['America/Indiana/Indianapolis','États-Unis'],['America/Indiana/Vincennes','États-Unis'],['America/Indiana/Winamac','États-Unis'],['America/Indiana/Marengo','États-Unis'],['America/Indiana/Petersburg','États-Unis'],['America/Indiana/Vevay','États-Unis'],['America/Chicago','États-Unis'],['America/Indiana/Tell_City','États-Unis'],['America/Indiana/Knox','États-Unis'],['America/Menominee','États-Unis'],['America/North_Dakota/Center','États-Unis'],['America/North_Dakota/New_Salem','États-Unis'],['America/North_Dakota/Beulah','États-Unis'],['America/Denver','États-Unis'],['America/Boise','États-Unis'],['America/Phoenix','États-Unis'],['America/Los_Angeles','États-Unis'],['America/Anchorage','États-Unis'],['America/Juneau','États-Unis'],['America/Sitka','États-Unis'],['America/Metlakatla','États-Unis'],['America/Yakutat','États-Unis'],['America/Nome','États-Unis'],['America/Adak','États-Unis'],['Pacific/Honolulu','États-Unis'],['America/Montevideo','Uruguay'],['Asia/Samarkand','Ouzbékistan'],['Asia/Tashkent','Ouzbékistan'],['Europe/Vatican','Cité du Vatican'],['America/St_Vincent','Saint-Vincent-et-les-Grenadines'],['America/Caracas','Venezuela'],['Asia/Ho_Chi_Minh','Viêt Nam'],['Pacific/Efate','Vanuatu'],['Pacific/Apia','Samoa'],['Asia/Aden','Yémen'],['Africa/Johannesburg','Afrique du Sud'],['Africa/Lusaka','Zambie'],['Africa/Harare','Zimbabwe']];
   (function(){
     var champ = document.getElementById('pays');
     var ind = document.getElementById('indicatif');
     if(!champ || !ind || champ.value) return;
-    var zone;
-    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch(e){ return; }
-    if(!zone) return;
-    for(var i = 0; i < ZONES.length; i++){
-      if(ZONES[i][0] === zone){
-        var nom = ZONES[i][1];
-        champ.value = nom;
-        for(var j = 0; j < PAYS.length; j++){
-          if(PAYS[j][0] === nom){ ind.value = PAYS[j][1]; break; }
+
+    /* Le pays et l'indicatif sont toujours posés ensemble, jamais l'un sans l'autre. */
+    var poser = function(nom, indicatif){
+      champ.value = nom;
+      if(indicatif){ ind.value = indicatif; return; }
+      for(var j = 0; j < PAYS.length; j++){
+        if(PAYS[j][0] === nom){ ind.value = PAYS[j][1]; return; }
+      }
+    };
+
+    var zone = '';
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){ zone = ''; }
+
+    if(zone){
+      for(var k = 0; k < ZONES_RATTACHEES.length; k++){
+        if(ZONES_RATTACHEES[k][0] === zone){
+          poser(ZONES_RATTACHEES[k][1], ZONES_RATTACHEES[k][2]);
+          return;
         }
-        return;
+      }
+      for(var i = 0; i < ZONES.length; i++){
+        if(ZONES[i][0] === zone){ poser(ZONES[i][1]); return; }
       }
     }
+
+    /* Fuseau inconnu : on retombe sur le marché principal, les deux champs restant cohérents. */
+    /* On reprend le nom exact tel qu'il figure dans la liste, apostrophe comprise. */
+    poser(PAYS.length ? PAYS[0][0] : 'Côte d\u2019Ivoire', PAYS.length ? PAYS[0][1] : '+225');
   })();
 
   /* ---- On décourage la récupération des images ---- */
