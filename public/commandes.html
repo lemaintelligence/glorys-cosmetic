@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Commandes Kelostop.</title>
+<style>
+:root{
+  --vert:#0F7432; --vert-fonce:#0A4A22; --vert-pale:#E6F1E7; --vert-voile:#F5F9F4;
+  --or:#C9A227; --or-texte:#8A6D0F; --encre:#14261A; --encre-doux:#4A5A4E;
+  --blanc:#FFFFFF; --trait:#DCE7DC; --rayon:14px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--vert-voile);color:var(--encre);
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.5;
+}
+header{
+  background:var(--vert-fonce);color:#fff;padding:16px 18px;
+  position:sticky;top:0;z-index:10;
+}
+header h1{margin:0;font-size:1.05rem;}
+header p{margin:3px 0 0;font-size:.8rem;color:#A9BCAC;}
+main{padding:16px;max-width:900px;margin:0 auto;}
+
+.boite{
+  background:var(--blanc);border:1px solid var(--trait);
+  border-radius:var(--rayon);padding:16px;margin-bottom:16px;
+}
+label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;}
+input{
+  width:100%;padding:11px 13px;font:inherit;
+  border:1.4px solid var(--trait);border-radius:10px;background:var(--blanc);
+}
+input:focus{outline:none;border-color:var(--or-texte);}
+button{
+  margin-top:10px;width:100%;padding:12px 18px;font:inherit;font-weight:700;
+  color:#fff;background:var(--vert);border:0;border-radius:999px;cursor:pointer;
+}
+button:hover{background:var(--vert-fonce);}
+button:disabled{opacity:.6;cursor:default;}
+
+.info{font-size:.82rem;color:var(--encre-doux);margin:8px 0 0;}
+.erreur{color:#7A1F2B;font-weight:700;}
+.compte{font-weight:700;margin:0 0 12px;}
+
+.commande{
+  background:var(--blanc);border:1px solid var(--trait);border-left:4px solid var(--or);
+  border-radius:var(--rayon);padding:14px;margin-bottom:12px;
+}
+.commande h2{margin:0 0 4px;font-size:1rem;}
+.commande .date{font-size:.76rem;color:var(--encre-doux);margin:0 0 10px;}
+.ligne{display:flex;gap:8px;padding:3px 0;font-size:.86rem;border-top:1px solid var(--vert-pale);}
+.ligne:first-of-type{border-top:0;}
+.ligne b{flex:0 0 42%;color:var(--encre-doux);font-weight:600;}
+.actions{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap;}
+.actions a{
+  display:inline-block;padding:8px 13px;border-radius:999px;text-decoration:none;
+  font-size:.8rem;font-weight:700;
+}
+.a-wa{background:#25D366;color:#0B3B1E;}
+.a-tel{background:var(--vert-pale);color:var(--vert-fonce);}
+.etiquette{
+  display:inline-block;padding:2px 9px;border-radius:999px;
+  font-size:.72rem;font-weight:700;margin-left:6px;
+}
+.gratuite{background:var(--vert-pale);color:var(--vert-fonce);}
+.payante{background:#FBF0CE;color:var(--or-texte);}
+
+@media print{
+  header,.boite,.actions{display:none !important;}
+  body{background:#fff;}
+  .commande{break-inside:avoid;page-break-inside:avoid;border:1px solid #999;}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Commandes Kelostop.</h1>
+  <p>Page privée. Ne la partagez pas.</p>
+</header>
+
+<main>
+  <div class="boite" id="boite-cle">
+    <label for="cle">Votre clé d'accès.</label>
+    <input type="password" id="cle" autocomplete="current-password" placeholder="Saisissez la clé">
+    <button type="button" id="voir">Voir les commandes.</button>
+    <p class="info" id="message"></p>
+  </div>
+
+  <p class="compte" id="compte" hidden></p>
+  <div id="liste"></div>
+</main>
+
+<script>
+(function(){
+  var COMMUNES = ['abidjan','abobo','adjame','anyama','attecoube','bingerville','cocody',
+    'koumassi','marcory','plateau','portbouet','songon','treichville','yopougon',
+    'riviera','angre','deuxplateaux','bietry','zone4'];
+
+  var sansAccent = function(x){
+    return (x||'').toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+  };
+  var estAbidjan = function(ville){
+    var v = sansAccent(ville);
+    if(!v) return false;
+    for(var i=0;i<COMMUNES.length;i++){ if(v.indexOf(COMMUNES[i]) !== -1) return true; }
+    return false;
+  };
+
+  var echappe = function(s){
+    return String(s===undefined||s===null?'':s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  };
+
+  var dateLisible = function(iso){
+    if(!iso) return '';
+    var d = new Date(iso);
+    if(isNaN(d.getTime())) return iso;
+    return d.toLocaleString('fr-FR', {dateStyle:'full', timeStyle:'short'});
+  };
+
+  var ETIQUETTES = {
+    prenom:'Prénom', nom:'Nom', pays:'Pays', ville:'Ville',
+    localisation:'Localisation', zone:'Zone', zone_autre:'Précision',
+    anciennete:'Ancienneté', livraison_date:'Date souhaitée',
+    livraison_heure:'Heure', livraison_autre:'Autre précision',
+    pays_visiteur:'Pays détecté'
+  };
+  var ORDRE = ['prenom','nom','pays','ville','localisation','zone','zone_autre',
+               'anciennete','livraison_date','livraison_heure','livraison_autre','pays_visiteur'];
+
+  var afficher = function(commandes){
+    var liste = document.getElementById('liste');
+    var compte = document.getElementById('compte');
+    liste.innerHTML = '';
+
+    if(!commandes.length){
+      compte.hidden = false;
+      compte.textContent = 'Aucune commande enregistrée pour le moment.';
+      return;
+    }
+    compte.hidden = false;
+    compte.textContent = commandes.length + (commandes.length > 1 ? ' commandes.' : ' commande.');
+
+    commandes.forEach(function(c){
+      var tel = ((c.indicatif||'') + (c.contact||'')).replace(/[^0-9+]/g,'').replace(/^\+/,'');
+      var gratuite = estAbidjan(c.ville);
+
+      var lignes = '';
+      ORDRE.forEach(function(champ){
+        if(c[champ]){
+          lignes += '<div class="ligne"><b>' + ETIQUETTES[champ] + '</b><span>'
+                 + echappe(c[champ]) + '</span></div>';
+        }
+      });
+
+      var actions = '';
+      if(tel){
+        actions = '<div class="actions">'
+          + '<a class="a-wa" href="https://wa.me/' + echappe(tel) + '" target="_blank" rel="noopener">Écrire sur WhatsApp</a>'
+          + '<a class="a-tel" href="tel:+' + echappe(tel) + '">Appeler</a>'
+          + '</div>';
+      }
+
+      var bloc = document.createElement('div');
+      bloc.className = 'commande';
+      bloc.innerHTML =
+        '<h2>' + echappe((c.prenom||'') + ' ' + (c.nom||'')).trim()
+          + '<span class="etiquette ' + (gratuite?'gratuite':'payante') + '">'
+          + (gratuite ? 'Livraison gratuite' : 'Expédition à payer') + '</span></h2>'
+        + '<p class="date">' + echappe(dateLisible(c.recu_le)) + '</p>'
+        + '<div class="ligne"><b>Contact</b><span>' + echappe(((c.indicatif||'')+' '+(c.contact||'')).trim()) + '</span></div>'
+        + lignes
+        + actions;
+      liste.appendChild(bloc);
+    });
+  };
+
+  var bouton = document.getElementById('voir');
+  var message = document.getElementById('message');
+
+  var charger = function(){
+    var cle = document.getElementById('cle').value.trim();
+    if(!cle){ message.className='info erreur'; message.textContent='Saisissez la clé.'; return; }
+
+    bouton.disabled = true;
+    bouton.textContent = 'Chargement…';
+    message.className = 'info';
+    message.textContent = '';
+
+    fetch('/api/commandes?cle=' + encodeURIComponent(cle) + '&n=500', {cache:'no-store'})
+      .then(function(r){ return r.json().then(function(j){ return {statut:r.status, corps:j}; }); })
+      .then(function(res){
+        bouton.disabled = false;
+        bouton.textContent = 'Actualiser.';
+        if(res.statut === 401){
+          message.className='info erreur'; message.textContent='Clé refusée.'; return;
+        }
+        if(!res.corps.ok){
+          message.className='info erreur';
+          message.textContent='Erreur : ' + (res.corps.erreur || 'inconnue') + '.';
+          return;
+        }
+        try { sessionStorage.setItem('cle-kelostop', cle); } catch(e){}
+        afficher(res.corps.commandes || []);
+      })
+      .catch(function(){
+        bouton.disabled = false;
+        bouton.textContent = 'Réessayer.';
+        message.className='info erreur';
+        message.textContent = 'Connexion impossible. Vérifiez votre réseau.';
+      });
+  };
+
+  bouton.addEventListener('click', charger);
+  document.getElementById('cle').addEventListener('keydown', function(ev){
+    if(ev.key === 'Enter') charger();
+  });
+
+  /* La clé reste le temps de la session, pour ne pas la retaper à chaque fois. */
+  try {
+    var memo = sessionStorage.getItem('cle-kelostop');
+    if(memo){ document.getElementById('cle').value = memo; charger(); }
+  } catch(e){}
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Kelostop — configuration Cloudflare.
+#
+# À placer à la racine du dépôt, à côté de index.html et du dossier images.
+
+name = "gloryscosmetique"
+main = "worker.js"
+compatibility_date = "2026-08-12"
+
+# Les fichiers du site (index.html, images) sont servis depuis la racine.
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+# La base qui garde les commandes.
+# Remplacez la valeur ci-dessous par l'identifiant que Cloudflare vous donnera.
+[[kv_namespaces]]
+binding = "COMMANDES"
+id = "7e1505880b5b485e90f10cb975063e55"
