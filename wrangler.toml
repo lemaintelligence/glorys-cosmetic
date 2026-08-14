@@ -8,7 +8,7 @@ compatibility_date = "2026-08-12"
 
 # Les fichiers du site (index.html, images) sont servis depuis la racine.
 [assets]
-directory = "./"
+directory = "./public"
 binding = "ASSETS"
 
 # La base qui garde les commandes.
